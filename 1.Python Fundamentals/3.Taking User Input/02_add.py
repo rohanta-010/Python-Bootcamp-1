@@ -8,4 +8,5 @@ b = int(input("Enter second number: "))
 # b = int(b)
 
 print(a + b)
-# a : variable stores the new value, replacing the old one.
+
+## a : variable stores the new value, replacing the old one.
