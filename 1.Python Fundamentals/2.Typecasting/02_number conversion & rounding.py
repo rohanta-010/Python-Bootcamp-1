@@ -1,4 +1,4 @@
-# Number Conversion & Rounding in Python
+### Number Conversion & Rounding in Python
 
 ## 1. int() - Remove Decimal (Truncate) : Default Conversion
 
@@ -48,7 +48,7 @@ print(round(2.5))    # 2 (rounds to nearest even)
 print(round(3.5))    # 4 (rounds to nearest even)
 
 
-# Round to decimal places:
+## Round to decimal places:
 
 # round(x) → integer
 # round(x, 0) → float with .0
@@ -64,8 +64,8 @@ print(round(3.5))    # 4 (rounds to nearest even)
 
 print("\nround() - Round to Decimal Places")
 print(round(3.14159, 0))   # 3.0
-print(round(3.14159, 2))   # 3.14 (1<5, so 4 remains unchanged)
-print(round(3.14159, 3))   # 3.142 (5≥5, so 1 becomes 2)
+print(round(3.14159, 2))   # 3.14 (here (N+1)th digit is 1, 1<=4, so 4 remains unchanged)
+print(round(3.14159, 3))   # 3.142 (here (N+1)th digit is 5, 5≥5, so 1 becomes 2)
 
 
 ## 5. math.trunc() - Truncate
@@ -100,7 +100,7 @@ print(math.trunc(-3.99))   # -3
 # - **round()** → Go to the nearest integer.
 # - **trunc()** → Same as `int()` for float values.
 
-### Easy Memory Trick
+## Easy Memory Trick
 
 # int()   → Ignore decimal
 # floor() → Go Down ⬇️
