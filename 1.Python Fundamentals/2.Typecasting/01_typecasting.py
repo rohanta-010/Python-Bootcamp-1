@@ -30,8 +30,8 @@ num_str = str(num)
 print(num_str) # Output: "25"
 print(type(num_str))
 
-# Convert float to integer
+# Convert float to integer(default- removing the decimal places)
 pi = 3.14
 pi_int = int(pi)
-print(pi_int) # Output: 3
+print(pi_int) # Output: 3 
 print(type(pi_int))
