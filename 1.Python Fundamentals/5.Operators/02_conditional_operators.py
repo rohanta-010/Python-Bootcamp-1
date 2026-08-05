@@ -1,10 +1,9 @@
 a = 34
 
-b = 2
-
-# Conditional Operators 
-print(a>4); print(a<4) 
+## Conditional Operators 
+print(a>4); print(a<4); print("\n")
 # Each line of code is a statement. You can write multiple statements on one line using a semicolon ( ; ), but this is not recommended.
+
 print(a<=4)
 print(a>=4)
 print(a==4) # Is a equal to 4?

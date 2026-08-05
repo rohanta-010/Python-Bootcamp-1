@@ -1,12 +1,12 @@
-# Python Buffering Notes: time.sleep(), -u, flush=True
-#
+#### Python Buffering Notes: time.sleep(), -u, flush=True
+
 # ------------------------------------------------------------
-# time.sleep(1)
+### time.sleep(1)
 # ------------------------------------------------------------
 # time.sleep(1) pauses program execution for 1 second.
 # It delays the next instruction but does NOT control buffering.
 #
-# Example:
+## Example:
 # import time
 # for i in range(5):
 #     print(i)
@@ -17,33 +17,33 @@
 # numbers appear one by one even without -u.
 #
 # ------------------------------------------------------------
-# Python -u (Unbuffered Mode)
+### Python -u (Unbuffered Mode)
 # ------------------------------------------------------------
 # Run script using:
 # python -u script.py
 #
 # -u forces stdout and stderr to display immediately.
 #
-# Example:
+## Example:
 # for i in range(5):
 #     print(i, end=" ")
 #     time.sleep(1)
 #
 # Without -u:
-# output may appear together after loop finishes.
+#            output may appear together after loop finishes.
 #
 # With -u:
-# output appears one by one every second.
+#         output appears one by one every second.
 #
-#Buffering: Store temporarily, then send later.
-#Unbuffering (or flushing): Don't keep it waiting—send it immediately.
+#  Buffering: Store temporarily, then send later.
+#  Unbuffering (or flushing): Don't keep it waiting—send it immediately.
 #
 # ------------------------------------------------------------
-# flush=True
+### flush=True
 # ------------------------------------------------------------
 # flush=True forces Python to empty buffer immediately after print.
 #
-# Example:
+## Example:
 # print(i, end=" ", flush=True)
 #
 # Equivalent internal code:
@@ -67,13 +67,13 @@
 # Screen
 #
 # ------------------------------------------------------------
-# Difference between -u and flush=True
+### Difference between -u and flush=True
 # ------------------------------------------------------------
 # -u         -> applies to whole program
 # flush=True -> applies to one print statement only
 #
 # ------------------------------------------------------------
-# Easy Memory Trick
+### Easy Memory Trick
 # ------------------------------------------------------------
 # sleep() -> pauses execution
 # flush() -> forces display
@@ -116,22 +116,21 @@ Screen
 #   
 # 
 
-# There are three common buffering modes:
-# 
+## There are three common buffering modes:
+
 # Unbuffered – Output is sent immediately.
 # Line buffered – Output is sent when a newline (\n) is encountered.
 # Fully buffered – Output is sent only when the buffer is full or explicitly flushed.
 # --> Most terminals use line buffering for standard output (stdout).
-# 
+
 # Buffering mode depends on the destination of the output, not just on Python itself:
-# 
+
 # Terminal (interactive console): Usually line buffered.
 # File: Usually fully buffered.
 # Running with python -u: Unbuffered for standard output and standard error.
-# 
-# 
+
 # ------------------------------------------------------------
-# Demo 1: print() with newline (newline usually flushes automatically)
+## Demo 1: print() with newline (newline usually flushes automatically)
 # ------------------------------------------------------------
 
 import time
@@ -142,7 +141,7 @@ for i in range(5):
     time.sleep(1)
 
 # ------------------------------------------------------------
-# Demo 2: print without newline (buffering visible)
+## Demo 2: print without newline (buffering visible)
 # ------------------------------------------------------------
 
 print("\nDemo 2: print without newline")
@@ -153,7 +152,7 @@ for i in range(5):
 print()
 
 # ------------------------------------------------------------
-# Demo 3: print with flush=True
+## Demo 3: print with flush=True
 # ------------------------------------------------------------
 
 print("\nDemo 3: print with flush=True")
