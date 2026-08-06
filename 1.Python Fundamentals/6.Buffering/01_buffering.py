@@ -5,48 +5,47 @@
 # ------------------------------------------------------------
 # time.sleep(1) pauses program execution for 1 second.
 # It delays the next instruction but does NOT control buffering.
-#
+
 ## Example:
 # import time
 # for i in range(5):
 #     print(i)
 #     time.sleep(1)
-#
+
 # Here, print(i) adds a newline automatically.
-# Because newline often flushes output in terminal,
-# numbers appear one by one even without -u.
-#
+# Because newline often flushes output in terminal, numbers appear one by one even without -u.
+
 # ------------------------------------------------------------
 ### Python -u (Unbuffered Mode)
 # ------------------------------------------------------------
 # Run script using:
 # python -u script.py
-#
+
 # -u forces stdout and stderr to display immediately.
-#
+
 ## Example:
 # for i in range(5):
 #     print(i, end=" ")
 #     time.sleep(1)
-#
+
 # Without -u:
 #            output may appear together after loop finishes.
-#
+
 # With -u:
 #         output appears one by one every second.
-#
+
 #  Buffering: Store temporarily, then send later.
 #  Unbuffering (or flushing): Don't keep it waiting—send it immediately.
-#
+
 # ------------------------------------------------------------
 ### flush=True
 # ------------------------------------------------------------
 # flush=True forces Python to empty buffer immediately after print.
-#
+
 ## Example:
 # print(i, end=" ", flush=True)
-#
-# Equivalent internal code:
+
+## Equivalent internal code:
 # import sys
 # sys.stdout.write(str(i) + " ")
 # sys.stdout.flush()
