@@ -1,0 +1,53 @@
+'''
+Standard Streams in Python
+------------------------------------------------
+
+1. stdin (Standard Input)
+- Used to receive input from the user.
+- Example: input()
+
+Keyboard
+   │
+   ▼
+stdin
+   │
+   ▼
+Python Program
+
+
+2. stdout (Standard Output)
+- Used to display normal program output.
+- Example: print("Hello")
+
+Python Program
+      │
+      ▼
+   stdout
+      │
+      ▼
+Terminal Screen
+
+
+3. stderr (Standard Error)
+- Used to display error and warning messages.
+- Example: ZeroDivisionError, FileNotFoundError
+
+Python Program
+      │
+      ▼
+   stderr
+      │
+      ▼
+Terminal Screen
+
+
+Examples:
+print("Hello")    --> stdout
+input()           --> stdin
+10 / 0            --> stderr (ZeroDivisionError)
+
+Note:
+- stdout and stderr are two separate output streams.
+- Both usually appear on the terminal, but they are handled independently.
+- 'python -u' makes both stdout and stderr unbuffered, so their output is displayed immediately.
+'''
