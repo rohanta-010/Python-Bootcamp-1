@@ -1,4 +1,6 @@
-s = "hello world" # Strings are immutable, original strings values are not changed but just added new strings.
+s = "hello world" 
+# Strings are immutable, original strings values are not changed.
+# Any operation that seems to modify a string actually creates and returns a brand-new string in memory.
 
 # s[0] = "R" # You cannot do this : TypeError: 'str' object does not support item assignment
 
