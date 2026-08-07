@@ -4,6 +4,12 @@ s = "hello world"
 
 # s[0] = "R" # You cannot do this : TypeError: 'str' object does not support item assignment
 
+## collection[index] = value
+# This syntax is called item assignment, and strings do not support item assignment because they are immutable.
+# List    : Allowed
+# Tuple   : Not Allowed
+# String  : Not Allowed
+
 a = len(s)
 print(a)
 print(s.upper(), s)
@@ -32,10 +38,15 @@ text = "Apples,Bananas,Pineapples"
 print(text.split(",")) # when you split a string, it returns a list of strings. The string is split at the specified separator (in this case, a comma).
 print(",".join(['Apples', 'Bananas', 'Pineapples'])) # when you join a list of strings, it returns a single string. The strings are joined together with the specified separator (in this case, a comma).
 
+text = "Apples,Bananas,Pineapples"
+print(text.split("@"))
+# Python looks for the character @.
+# Since @ does not exist in the string, nothing is split.
+# Entire string is returned as one element inside a list.
 print("\n")
 
 text = "Python123"
 print(text.isalpha()) # Output: False
 print(text.isdigit()) # Output: False
 print(text.isalnum()) # Output: True
-print(text.isspace()) # Output: False
+print(text.isspace()) # Output: False :- whitespace is blank space, tab space, new line etc.
