@@ -14,5 +14,5 @@ name = "Harry"
 print(name[-1])
 print(name[-2])
 print(name[-3]) 
-print(name[-4]) # name[-4+5] name[1] i.e name[-x+len(name)] = name[len(name)-x] = name[-4+5] = name[1]
+print(name[-4]) # name[-4+5] -> name[1] i.e name[-x+len(name)] = name[len(name)-x] = name[-4+5] -> ame[1]
 print(name[-5])
