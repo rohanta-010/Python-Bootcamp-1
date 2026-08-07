@@ -1,15 +1,18 @@
 string1 = "45554"
 
-# Method 1: Using slicing
+## Method 1: Using slicing
 if(string1 == string1[::-1]):
     print("The string is a Palindrome")
 else:
     print("The string is not a Palindrome")
 
-# Method 2: Using a loop
+## Method 2: Using a loop
 is_palindrome = True        
 
 for i in range(len(string1) // 2):
+   ##  Reason:
+   # - Remaining comparisons would be duplicates.
+   # - Middle character (if any) doesn't need comparison.
     if string1[i] != string1[len(string1) - 1 - i]:
         is_palindrome = False
         break       
