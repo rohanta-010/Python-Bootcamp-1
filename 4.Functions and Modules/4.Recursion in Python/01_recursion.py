@@ -12,7 +12,7 @@ fib(n) = fib(n-2) + fib(n-1)
 '''
 
 def fib(n):
-    # Base case of recursion
+    ## Base case of recursion
     # Base case = the condition that stops recursion; without it, recursive calls continue until Python reaches its recursion limit.
     # RecursionError: maximum recursion depth exceeded
     # If no base case is defined, the recursion will go on infinitely and will result in a stack overflow error. 
