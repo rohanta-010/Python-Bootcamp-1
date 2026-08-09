@@ -10,26 +10,27 @@ import mymodule # created a module named mymodule.py in the same directory as th
 
 ### __pycache__ and .pyc files
 #
-# When Python imports a module, it may automatically create a __pycache__ folder containing .pyc (Python compiled) files.
-# 
-## Example:
+# When Python imports a Python source module, it may create a __pycache__ folder containing .pyc (compiled bytecode) files.
+#
+## example, if we have:
+#
+#     mymodule.py
+#
+# and write:
+#
 #     import mymodule
 #
-## Python may create:
+# Python may create:
+#
 #     __pycache__/mymodule.cpython-314.pyc
 #
-# .pyc files contain Python bytecode and help Python load imported modules more efficiently on subsequent runs.
+# The location of __pycache__ depends on where the imported module is located. Therefore, importing an external package such as requests does not necessarily create __pycache__ in the folder containing our current Python file.
 #
-# __pycache__ and .pyc files are automatically generated and should not be committed to Git.
+# __pycache__ = folder used to store cached .pyc files.
+# .pyc = compiled Python bytecode file.
 #
-## Add the following to .gitignore:
-#     __pycache__/
-#     *.pyc
-# 
-# __pycache__ = a folder created by Python to store compiled files.
-# .pyc = the compiled Python bytecode file stored inside that folder.
-# 
-# These files can be deleted safely because Python will recreate them when needed.
+# These files are automatically generated and should not
+# normally be committed to Git.
 
 import requests 
 # "requests" is an external module which is used to make HTTP requests.
