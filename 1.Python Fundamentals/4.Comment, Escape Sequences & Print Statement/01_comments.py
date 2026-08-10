@@ -8,7 +8,8 @@ print("Hey how are you?")
 # Multi-line comments are enclosed in triple quotes (''' or """)
 
 '''
-Escape Sequences
+Escape Sequences:
+
 Escape sequences are used to include special characters in strings.
 Common escape sequences:
 \n : Newline
