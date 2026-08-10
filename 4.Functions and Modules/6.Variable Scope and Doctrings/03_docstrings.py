@@ -2,7 +2,7 @@
 
 
 def sum(a, b): 
-    '''This function is used to sum two numbers'''
+    '''This function is used to sum two numbers''' # always use triple quotes for docstrings. 
     c = a + b  
     return c
 

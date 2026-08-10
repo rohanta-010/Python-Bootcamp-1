@@ -22,5 +22,6 @@ print(list(map(square, list1)))
 # Output:
 # [1, 4, 9, 16, 25]
 #
-# In Python 3, map() returns a map object (iterator),
+# In Python 3, map() returns a map object (iterator), 
+# for example: <map object at 0x000001F3D4C1A5E0>. So, we use list() when we want to see/store all the results as a list.
 # so we use list() when we want to see/store all the results as a list.

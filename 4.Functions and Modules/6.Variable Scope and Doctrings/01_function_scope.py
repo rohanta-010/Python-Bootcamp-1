@@ -13,6 +13,6 @@ print(z)
 print(sum(4, 6)) 
 print(z)
 
-# print(c) : we cannot access a,b,c here because it is a local variable in the sum function and are destroyed after the function returns. So, we cannot access them outside the function. It will give an error "NameError: name 'c' is not defined".
+# print(c) : we cannot access a,b,c here because it is a local variable in the sum function and are destroyed after the function returns. Their scope is limited to the function. So, we cannot access them outside the function.Hence their lifetime is limited to the function. It will give an error "NameError: name 'c' is not defined".
 # print(a) 
 # print(b)
