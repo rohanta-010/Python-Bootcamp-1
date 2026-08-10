@@ -31,7 +31,14 @@ from ast import arguments
 print("Hey how are you\nI am good\\newline")
 print("Hello \" World")
 
-# print() automatically inserts a space between multiple arguments, not "within the arguments."
+## print() automatically inserts a space between multiple arguments, not "within the arguments."
+
+# Multiple arguments: Space is inserted BETWEEN them
+print("Hello", "World")
+
+# Single argument: Space must be typed WITHIN the argument itself
+print("HelloWorld")
+
 
 print('Hello World',"Harry",5) 
 ## Here, the print() function takes three arguments: 'Hello World', 'Harry', and 5. It will print them with a space in between each argument. assuming the default separator is a space.
