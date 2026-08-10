@@ -12,7 +12,7 @@ s = "hello world"
 
 a = len(s)
 print(a)
-print(s.upper(), s)
+print(s.upper(), s) # here s.upper() returns a new string with all uppercase letters, but the original string s remains unchanged.
 print(s.lower())
 print(s.capitalize()) # first letter of the string is capitalized
 print(s.title()) # first letter of each word is capitalized
