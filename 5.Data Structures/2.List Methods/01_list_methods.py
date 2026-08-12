@@ -2,8 +2,8 @@ marks = [5, 2, 21, 5, 7]
 extra_marks = [53, 23, 32]
 
 print(marks)
-# marks.append(63) # This will change the original list
-# marks.pop()
+marks.append(63) # This will change the original list
+marks.pop() # by default it removes the last item 
 marks.extend(extra_marks)
 print(marks)
 
@@ -123,7 +123,7 @@ print(numbers)  # Output: [30, 20, 10]
 
 items = [10, "hello", 3.14, True]
 items.reverse()
-print(items) # Output: [True, 3.14, "hello", 10]
+print(items)  # Output: [True, 3.14, "hello", 10]
 
 
 ## 10.clear() → Remove all items from the list
@@ -139,10 +139,11 @@ print(numbers)  # Output: []
 ## 11.copy() → Return a shallow copy of the list
     #  --> list.copy()
     #  If the list is empty, it returns an empty list.
-    #  copy() creates a shallow copy, meaning that it copies the references of the objects in the list, not the objects themselves. If the list contains mutable objects (like other lists), changes to those objects will be reflected in both the original and copied lists. Example: original_list = [[1, 2], [3, 4]]; copied_list = original_list.copy(); copied_list[0][0] = 99; print(original_list)  # Output: [[99, 2], [3, 4]]
+    #  copy() creates a shallow copy, meaning that it copies the references of the objects in the list, not the objects themselves. 
+    #  If the list contains mutable objects (like other lists), changes to those objects will be reflected in both the original and copied lists. Example: original_list = [[1, 2], [3, 4]]; copied_list = original_list.copy(); copied_list[0][0] = 99; print(original_list)  # Output: [[99, 2], [3, 4]]
     #  If the list contains immutable objects (like numbers, strings, tuples), changes to those objects will not affect the original list. Example: original_list = [1, 2, 3]; copied_list = original_list.copy(); copied_list[0] = 99; print(original_list)  # Output: [1, 2, 3]
 
-numbers = [10, 20, 30]
+numbers = [10, 20, 30]  # since these are integers(immutable)
 copied_numbers = numbers.copy()
 print(copied_numbers)  # Output: [10, 20, 30]
 
@@ -177,7 +178,7 @@ ORDER
 
 COPYING
 │
-└── copy()     → create a separate list
+└── copy()     → create a separate list i.e Shallow copy (default)
 
 """
 
