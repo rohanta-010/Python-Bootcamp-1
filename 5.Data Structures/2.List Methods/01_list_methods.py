@@ -18,8 +18,8 @@ numbers = [10, 20, 30, 40]
     #  If the item is a list, it will be added as a single item (nested list).
     #  If the item is not a list, it will be added as a single item.
     #  If the item is empty, it will be added as a single item (empty list). EX: numbers.append([]) ---> [10, 20, 30, 40, []]
-    #  If the item is not provided, it will raise a TypeError. EX: numbers.append() ---> TypeError: append() takes exactly one argument   (0 given)
-    # If the list is empty, it will add the item to the list.
+    #  If the item is not provided, it will raise a TypeError. EX: numbers.append() ---> TypeError: append() takes exactly one argument (0 given)
+    #  If the list is empty, it will add the item to the list.
 
 numbers = [10, 20, 30] # ---> [10, 20, 30, 40]
 numbers.append(40)
@@ -35,7 +35,7 @@ print(numbers)
     #  If the iterable is not a list, it will still work as long as it is iterable (like a tuple, set, etc.). example: numbers.extend((60, 70)) or numbers.extend({80, 90})
     #  If the iterable is empty, it will not change the list.
     #  If the iterable is not provided, it will raise a TypeError. EX: numbers.extend() ---> TypeError: extend() takes exactly one argument (0 given)
-    # If the list is empty, it will add the items from the iterable to the list.
+    #  If the list is empty, it will add the items from the iterable to the list.
 
 numbers = [10, 20, 30] # ---> [10, 20, 30, 40, 50]
 numbers.extend([40, 50])
@@ -114,12 +114,16 @@ print(numbers)  # Output: [30, 20, 10]
 ## 9.reverse() → Reverse the order of the list
     #  --> list.reverse()
     #  If the list is empty, it remains empty.
-    #  If the list contains items of different types or that are not comparable, it raises a TypeError.
+    #  doesn't compare elements → different types are fine 
     #  reverse() does not sort the list, it simply reverses the existing order.
 
 numbers = [10, 20, 30]
 numbers.reverse()
 print(numbers)  # Output: [30, 20, 10]
+
+items = [10, "hello", 3.14, True]
+items.reverse()
+print(items) # Output: [True, 3.14, "hello", 10]
 
 
 ## 10.clear() → Remove all items from the list
