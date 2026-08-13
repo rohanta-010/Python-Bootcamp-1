@@ -31,13 +31,13 @@ print(numbers)
     # If the elements are already present, it does nothing.
     # If the set is empty, it will add the elements to the set.
     # If the elements are empty, it will not change the set.
-    # If the elements are not provided, it will raise a TypeError. EX: numbers.update() ---> TypeError: update expected at least 1 argument, got 0
+    # If the elements are not provided, it will raise a TypeError. EX: numbers.update() ---> TypeError: update expected at least 1 argument (0 given)
 
 numbers = {10, 20, 30}  # ---> {10, 20, 30, 40, 50, 60}
-numbers.update([40, 50, 60])
+numbers.update([40, 50, 60]) # iterable list
 print(numbers)
 
-numbers.update({40, 50}) # ---> {10, 20, 30, 40, 50}
+numbers.update({40, 50}) # ---> {10, 20, 30, 40, 50} 
 print(numbers)
 
 
@@ -96,7 +96,7 @@ print(numbers)
     # If the sets have duplicate items, it returns a new set with only unique items.
     # If the sets are not provided, it will raise a TypeError. EX: numbers.union() ---> TypeError: union() takes at least 1 argument (0 given)
 
-    # using operartor | (pipe) to perform union operation on two sets. It perform s the same operation as union() method. 
+    # using operartor | (pipe) to perform union operation on two sets. It perform's the same operation as union() method. 
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
@@ -202,13 +202,14 @@ print(result) # Output: True
     # If the set is empty, it returns an empty set.
     # If the set has items, it returns a shallow copy of the set.
     # If the set is not provided, it will raise a TypeError. EX: numbers.copy() ---> TypeError: copy() takes no arguments (1 given)
-    # If the set is modified after the copy, the copy will not be affected. If the copy is modified, the original set will not be affected ex for example: numbers = {10, 20, 30} # ---> {10, 20, 30} numbers_copy = numbers.copy() numbers_copy.add(40) print(numbers) Output: {10, 20, 30} print(numbers_copy) # Output: {10, 20, 30, 40} similarly vice varsa, if the original set is modified, the copy will not be affected. If the copy is modified, the original set will not be affected.
+    # If the set is modified after the copy, the copy will not be affected. If the copy is modified, the original set will not be affected.Example: numbers = {10, 20, 30} # ---> {10, 20, 30} numbers_copy = numbers.copy() numbers_copy.add(40) print(numbers) Output: {10, 20, 30} print(numbers_copy) # Output: {10, 20, 30, 40} similarly vice varsa, if the original set is modified, the copy will not be affected. If the copy is modified, the original set will not be affected.
 
-numbers = {10, 20, 30}
+numbers = {10, 20, 30} # immutable
 numbers_copy = numbers.copy() # ---> {10, 20, 30}
 numbers_copy.add(40) # ---> {10, 20, 30, 40}
-print(numbers) # Output: {10, 20, 30}
+print(numbers) # Output: {10, 20, 30} 
 print(numbers_copy) # Output: {10, 20, 30, 40}
+
 
 
 ## 14.len() → Return the number of items in the set
@@ -217,7 +218,7 @@ print(numbers_copy) # Output: {10, 20, 30, 40}
     # If the set has items, it returns the number of items in the set.
     # If the set is not provided, it will raise a TypeError. EX: len() ---> TypeError: len() takes exactly one argument (0 given)
     # If the set is modified after the len() call, the len() will not be affected. If the len() is called again, it will return the updated length of the set.
-    # If the set is modified after the len() call, the len() will not be affected. If the len() is called again, it will return the updated length of the set.
+
 
 numbers = {10, 20, 30}
 length = len(numbers) # ---> 3
@@ -248,6 +249,67 @@ print(result) # Output: True
 numbers = {10, 20, 30}
 immutable_numbers = frozenset(numbers) # ---> frozenset({10, 20, 30})
 print(immutable_numbers) # Output: frozenset({10, 20, 30})
+
+
+# Format:
+# frozenset(iterable)
+#
+# frozenset() creates an immutable version of a set.
+#
+# Example:
+#
+# numbers = {10, 20, 30}
+# immutable_numbers = frozenset(numbers)
+#
+# print(immutable_numbers)
+# Output: frozenset({10, 20, 30})
+#
+# A frozenset cannot be modified.
+#
+# immutable_numbers.add(40)    # X AttributeError
+# immutable_numbers.remove(10) # X AttributeError
+#
+#
+# The iterable can be a list, tuple, set, string, etc.
+#
+# frozenset([10, 20, 30])
+# → frozenset({10, 20, 30})
+#
+#
+# Empty iterable:
+#
+# frozenset([])
+# → frozenset()
+#
+# frozenset() is also valid and returns an empty frozenset.
+#
+#
+# If the original iterable is modified after creating the
+# frozenset, the existing frozenset is NOT affected.
+#
+# Example:
+#
+# numbers = {10, 20, 30}
+# immutable_numbers = frozenset(numbers)
+#
+# numbers.add(40)
+#
+# print(numbers)
+# → {10, 20, 30, 40}
+#
+# print(immutable_numbers)
+# → frozenset({10, 20, 30})
+#
+#
+# IMPORTANT:
+# A normal set is mutable and cannot be an element of another set.
+# A frozenset is immutable and can be an element of another set.
+#
+# set       → mutable
+# frozenset → immutable
+#
+# MEMORY TRICK:
+# frozenset = "frozen" set → cannot be changed
 
 
 ## 17. set() → Return a mutable set
