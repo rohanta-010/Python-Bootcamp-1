@@ -333,23 +333,28 @@ print(immutable_numbers) # Output: frozenset({10, 20, 30})
 # By locking the contents so they can never change, the hash value never changes, and Python never loses the item in the warehouse!
 
 
-## 17. set() → Return a mutable set
+## 17. set() → Return a new mutable set object
     # --> set(iterable)
+    # NOTE: set() is a built-in Python type constructor, not a method on an existing set.
     # If the iterable is empty, it returns an empty set.
-    # If the iterable has items, it returns a mutable set with the items from the iterable
-    # If the iterable is not provided, Calling set() with no arguments is perfectly valid
-    # If the iterable is modified after the set() call, the set() will not be affected. If the set() is called again, it will return the updated result.
-    # In Python, if you use empty curly braces {}, Python creates an empty dictionary, not an empty set. The only way to create an empty set is by calling set() with nothing inside the parentheses.
+    # If the iterable has items, it returns a new mutable set with the unique items from the iterable.
+    # Calling set() with no arguments is perfectly valid; it creates an empty set().
+    # Modifying the original iterable after calling set() will NOT affect the new set.
+    
+    # TRAP: In Python, using empty curly braces {} creates an empty dictionary, not an empty set. 
+    # The ONLY way to create an empty set is by calling set() with nothing inside the parentheses.
 
-numbers = frozenset({10, 20, 30}) # here the numbers set become immutable
-mutable_numbers = set(numbers) # ---> {10, 20, 30}
+# Converting a frozenset back to a mutable set
+frozen_numbers = frozenset({10, 20, 30}) 
+mutable_numbers = set(frozen_numbers) 
 print(mutable_numbers) # Output: {10, 20, 30}
 
-# Converting a list with duplicates
+# Converting a list with duplicates (A pro trick to remove duplicates!)
 my_list = [10, 20, 20, 30]
 my_set = set(my_list)
-print(my_set) # Output: {10, 20, 30} (duplicates removed)
+print(my_set) # Output: {10, 20, 30}
 
+# The Empty Set vs Empty Dictionary Trap
 empty_dict = {}
 print(type(empty_dict)) # Output: <class 'dict'>
 
@@ -357,69 +362,88 @@ empty_set = set()       # This is the correct way to make an empty set!
 print(type(empty_set))  # Output: <class 'set'>
 
 
-## 18. del() → Delete a set
-    # --> del set
-    ## del is a Keyword, not a Function:
-    # In Python, del is a built-in statement (like if, for, or return), not a method or a function.
-    # Because it is not a function, you should never use parentheses with it.
-    # Incorrect: del(numbers) or del()
-    # Correct: del numbers
-
-    # If the set has items, it deletes the set.
-    # del completely destroys the variable name, regardless of what is inside it. If you have an empty set (numbers = set()) and you use del numbers, the variable numbers is still completely deleted, and trying to print it will give you a NameError.
-    # Once deleted, attempting to use or modify the variable will raise a NameError.
-
-    # del is a fundamental Python keyword and not a function, trying to run it by itself without providing a variable behaves differently.
-    # If you just type del by itself, or del(), Python will not give you a TypeError. It will give you a SyntaxError before the code even runs, because the grammar of the code is mathematically invalid to the Python interpreter.
+## 18. del → Delete a set variable from memory
+    # --> del set_variable
+    # KEYWORD vs FUNCTION: `del` is a built-in Python statement/keyword, NOT a function or method.
+    # Idiomatic usage is WITHOUT parentheses: `del numbers`.
+    # Writing `del()` or typing `del` alone causes a parse-time `SyntaxError` because the grammar is incomplete.
+    #
+    # Effect: `del` unbinds the variable name entirely and removes it from the local/global namespace.
+    # If no other references exist, Python's garbage collector reclaims the memory.
+    #
+    # Result: Attempting to access or print the variable after using `del` raises a NameError.
 
 numbers = {10, 20, 30}
-del numbers # ---> set is deleted
-print(numbers) # Output: NameError: name 'numbers' is not defined
+
+# Deleting the variable completely
+del numbers 
+
+# Attempting to print the deleted variable
+# print(numbers) # Output: NameError: name 'numbers' is not defined
 
 
-## 19. in → Return True if an item is present in the set
+## 19. in (Membership Operator) → Return True if an item is present in the set
     # --> item in set
-    # If the set is empty, it returns False.
-    # If the set has items, it returns True if an item is present in the set
-    # set() creates an empty set. A set is perfectly iterable (even if it's empty). If you run 10 in set(), Python simply checks the empty set, sees that 10 is not there, and returns False.
-    # You will only get a TypeError if the thing on the right side of in is a data type that cannot hold multiple items (like a single integer).
-    # If you forget to provide the set and just write 10 in , Python will give you a SyntaxError before the code even runs, because the sentence is grammatically incomplete.
-    # If the set is modified after the in call, the in will not be affected.
+    # NOTE: 'in' is a Python membership operator, not a set method.
+    # If the set is empty, it safely returns False (e.g., 10 in set() ---> False).
+    # It evaluates instantly, returning a standard True/False boolean.
+    
+    # SyntaxError: If you just write '10 in', Python throws a SyntaxError because the sentence is grammatically incomplete.
+    # TypeError: If the right side of 'in' is not a collection/iterable (e.g., 10 in 5), Python raises a TypeError.
+    
+    # EXPERT TIP: Using 'in' on a set is incredibly fast! Because sets use hash values (the warehouse trick), Python finds the item instantly without scanning the whole set. (This is called O(1) time complexity).
 
 numbers = {10, 20, 30}
-result = 10 in numbers # ---> True, because 10 is present in the set
-print(result) # Output: True
+result = 10 in numbers 
+print(result) # Output: True (because 10 is present)
 
 
-## 20. not in → Return True if an item is not present in the set
+## 20. not in (Membership Operator) → Return True if an item is NOT present in the set
     # --> item not in set
-    # If the set is empty, it returns True.
-    # If the set has items, it returns True if an item is not present in the set
-    # If the set is modified after the not in call, the not in will not be affected. If the not in is called again, it will return the updated result.
+    # NOTE: 'not in' is the exact inverse of the 'in' operator.
+    # If the set is empty, it always returns True (e.g., 40 not in set() ---> True).
+    # It evaluates instantly, returning a standard True/False boolean.
+    
+    # Just like 'in', checking 'not in' is incredibly fast for sets (O(1) lookup time) because Python just checks the hash table directly to see if the shelf is empty.
+    # The same SyntaxError (incomplete sentence) and TypeError (right side is not an iterable) rules apply here.
 
 numbers = {10, 20, 30}
-result = 40 not in numbers # ---> True, because 40 is not present in the set
-print(result) # Output: True
+result = 40 not in numbers 
+
+print(result) # Output: True (because 40 is safely missing from the set)
 
 
-## 21.intersection_update() → Update the set with only the items that are present in both sets
-    # --> set.intersection_update(set1, set2, ...)
-    # Unlike intersection(), this does NOT return a new set. It modifies the original set in-place and returns None.
-    # It removes any item from the original set that is not found in the provided sets.
-    # If the provided set is empty, it will empty the original set (because they share no common items).
-    # If no arguments are provided (e.g., numbers1.intersection_update()), it does nothing and leaves the set unchanged
+## 21. intersection_update() → Update the set, keeping only items found in both (or all) sets
+    # --> set.intersection_update(*others)
+    # TRAP: Unlike intersection(), this does NOT return a new set. It modifies the original set in-place and evaluates to None.
+    # It removes any item from the original set that is not found in the provided iterable(s).
+    # If a provided iterable is empty, it completely empties the original set (because there are no common items).
+    # If no arguments are provided, it simply does nothing and leaves the original set unchanged.
+    # The arguments can be ANY iterable (lists, tuples, other sets, etc.).
+
+    # You can use the augmented assignment operator &= to perform this exact same in-place operation.
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
-numbers1.intersection_update(numbers2) # ---> {30}
-print(numbers1) # Output: {30}
+
+numbers1.intersection_update(numbers2) 
+print(numbers1) # Output: {30} (Original set is modified!)
+
+# Using the operator:
+numbers3 = {5, 10, 15}
+numbers3 &= {10, 20, 30} 
+print(numbers3) # Output: {10}
+
 
 ## 22. difference_update() → Remove items from the original set that exist in the provided sets
-    # --> set.difference_update(set1, set2, ...)
-    # This modifies the original set in-place and returns None.
-    # It acts like subtraction: Original Set - Provided Sets.
-    # If the provided sets are empty (or share no common items), the original set remains completely unchanged.
-    # If no arguments are provided (e.g., numbers.difference_update()), it does nothing and leaves the set unchanged.
+    # --> set.difference_update(*others)
+    # TRAP: This modifies the original set in-place and evaluates to None.
+    # It acts like subtraction: Original Set - Provided Iterable(s).
+    # If the provided iterables are empty (or share no common items), the original set remains completely unchanged.
+    # If no arguments are provided, it simply does nothing and leaves the set unchanged.
+    # The arguments can be ANY iterable (lists, tuples, other sets, etc.).
+
+    # You can use the augmented assignment operator -= to perform this exact same in-place operation.
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
@@ -427,17 +451,25 @@ numbers2 = {30, 40, 50}
 # Modifies numbers1 by deleting anything that is also in numbers2
 numbers1.difference_update(numbers2) 
 
-print(numbers1) # Output: {10, 20}
+print(numbers1) # Output: {10, 20} (Original set is modified!)
 print(numbers2) # Output: {30, 40, 50} (The provided set is NEVER modified!)
+
+# Using the operator:
+numbers3 = {1, 2, 3, 4, 5}
+numbers3 -= {4, 5, 6} 
+print(numbers3) # Output: {1, 2, 3}
 
 
 ## 23. symmetric_difference_update() → Keep items present in either set, but NOT in both
-    # --> set.symmetric_difference_update(set1)
-    # TRAP: Unlike difference_update, this method takes EXACTLY ONE argument. 
+    # --> set.symmetric_difference_update(other_iterable)
+    # TRAP: Unlike difference_update(), this method accepts STRICTLY ONE argument. 
     # If no argument is provided, or if multiple are provided, it raises a TypeError.
-    # It modifies the original set in-place and returns None.
-    # If the provided set is empty, the original set remains unchanged.
-    # If the sets have zero common items, the original set becomes the union of both sets.
+    # It modifies the original set in-place and evaluates to None.
+    # If the provided iterable is empty, the original set remains completely unchanged.
+    # If the sets have zero common items, the original set becomes the union of both.
+    # The argument can be ANY iterable (lists, tuples, other sets, etc.).
+
+    # You can use the augmented assignment operator ^= to perform this exact same in-place operation.
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
@@ -445,6 +477,11 @@ numbers2 = {30, 40, 50}
 # Modifies numbers1: removes 30 (overlap) and adds 40, 50 (unique to numbers2)
 numbers1.symmetric_difference_update(numbers2) 
 
-print(numbers1) # Output: {10, 20, 40, 50}
-print(numbers2) # Output: {30, 40, 50} (The second set is NEVER modified!)
+print(numbers1) # Output: {10, 20, 40, 50} (Original set is modified!)
+print(numbers2) # Output: {30, 40, 50} (The provided set is NEVER modified!)
+
+# Using the operator:
+numbers3 = {1, 2, 3}
+numbers3 ^= {3, 4, 5} 
+print(numbers3) # Output: {1, 2, 4, 5}
 
