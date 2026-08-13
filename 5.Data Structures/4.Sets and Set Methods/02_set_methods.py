@@ -19,6 +19,7 @@ numbers = {10, 20, 30}
     # If the item is already present, it does nothing.
     # If the set is empty, it will add the item to the set.
     # If the item is not provided, it will raise a TypeError. EX: numbers.add() ---> TypeError: add() takes exactly one argument (0 given)
+    # Because of the hashing rule, the item you put inside add() must be immutable. If you try to do numbers.add([40, 50]) (adding a list), Python will throw a TypeError: unhashable type: 'list'
 
 numbers = {10, 20, 30}  # ---> {10, 20, 30, 40}
 numbers.add(40)
@@ -26,233 +27,258 @@ print(numbers)
 
 
 ## 2. update() → Add MULTIPLE elements
-    # --> set.update(elemets) 
+    # --> set.update(elements) 
     # If the elements are not iterable, it will raise a TypeError. EX: numbers.update(50) ---> TypeError: 'int' object is not iterable
-    # If the elements are already present, it does nothing.
+    # If the elements are already present, it does nothing (duplicates are ignored).
     # If the set is empty, it will add the elements to the set.
-    # If the elements are empty, it will not change the set.
-    # If the elements are not provided, it will raise a TypeError. EX: numbers.update() ---> TypeError: update expected at least 1 argument (0 given)
+    # If the elements are empty iterables (like []), it will not change the set.
+    # Calling update() with no arguments is perfectly valid. EX: numbers.update() ---> Does nothing and leaves the set unchanged.
 
-numbers = {10, 20, 30}  # ---> {10, 20, 30, 40, 50, 60}
+numbers = {10, 20, 30}
 numbers.update([40, 50, 60]) # iterable list
-print(numbers)
+print(numbers) # Output: {10, 20, 30, 40, 50, 60}
 
-numbers.update({40, 50}) # ---> {10, 20, 30, 40, 50} 
-print(numbers)
+numbers.update({40, 50}) 
+print(numbers) # Output: {10, 20, 30, 40, 50, 60} (duplicates 40, 50 are ignored)
 
 
-## 3.remove() → Remove an item from the set
+## 3. remove() → Remove an item from the set
     # --> set.remove(item)
     # If the item is not found, it raises a KeyError.
-    # If the set is empty, it raises a KeyError.
-    # If the item is found multiple times, it removes only one occurrence (since sets do not allow duplicates, this is not applicable).EX numbers.remove(40) ---> {10, 20, 30, 50, 60}. Here, 40 is removed from the set.
+    # If the set is empty, it raises a KeyError (because the item is not found).
+    # Sets do not allow duplicates, so it simply removes the single unique instance of that item.
     # If the item is not provided, it will raise a TypeError. EX: numbers.remove() ---> TypeError: remove() takes exactly one argument (0 given)
 
-numbers = {10, 20, 30, 40, 50} # ---> {10, 20, 30, 50}
+numbers = {10, 20, 30, 40, 50} 
 numbers.remove(40)
-print(numbers)
+print(numbers) # Output: {10, 20, 30, 50}
 
 
-## 4.discard() → Remove an item from the set if it exists
+## 4. discard() → Remove an item from the set if it exists
     # --> set.discard(item)
-    # If the item is not found, it does nothing.
+    # If the item is not found, it does nothing (no error is raised).
     # If the set is empty, it does nothing.
-    # difference between remove and discard is that remove will throw an error if the item is not present in the set, while discard will not throw an error if the item is not present in the set.
+    # The key difference between remove() and discard() is that remove() will throw a KeyError if the item is missing, while discard() will safely do nothing.
+    # If the item is not provided, it will raise a TypeError. EX: numbers.discard() ---> TypeError: discard() takes exactly one argument (0 given)
 
-numbers = {10, 20, 30, 40, 50} # ---> {10, 20, 30, 50}
+numbers = {10, 20, 30, 40, 50} 
 numbers.discard(40)
-print(numbers)
+print(numbers) # Output: {10, 20, 30, 50}
+
+# Trying to discard an item that isn't there
+numbers.discard(99) # Does nothing, no error!
 
 
-## 5.pop() → Remove and return an arbitrary item from the set
+## 5. pop() → Remove and return an arbitrary item from the set
     # --> set.pop()
     # If the set is empty, it raises a KeyError.
     # If the set has only one item, it removes and returns that item.
-    # If the set has multiple items, it removes and returns an arbitrary item (not necessarily the first item).
-    # If the item is provided, it will raise a TypeError. EX: numbers.pop(1) ---> TypeError: pop() takes no arguments (1 given)
-    # No argument is needed for pop() method. It removes and returns an arbitrary item from the set. Just an random item is removed from the set, not the first item. 
+    # If the set has multiple items, it removes and returns an arbitrary item (based on the underlying hash table, not necessarily the order you added them).
+    # If an argument is provided, it will raise a TypeError. EX: numbers.pop(1) ---> TypeError: pop() takes no arguments (1 given)
+    # NOTE: Unlike lists, sets do not have indexes, so you cannot specify which item to pop.
 
-numbers = {10, 20, 30} # ---> {20, 30}
+numbers = {10, 20, 30} 
 removed_item = numbers.pop()
-print(removed_item)
-print(numbers)
+
+print(removed_item) # Output: Could be 10, 20, or 30 (arbitrary)
+print(numbers)      # Output: The set with the remaining two items
 
 
-## 6.clear() → Remove all items from the set
+## 6. clear() → Remove all items from the set
     # --> set.clear()
-    # If the set is empty, it does nothing.
-    # If the set is not empty, it removes all items from the set.
-    # If the item is provided, it will raise a TypeError. EX: numbers.clear(1) ---> TypeError: clear() takes no arguments (1 given)
+    # If the set is empty, it safely does nothing.
+    # If the set is not empty, it removes all items, leaving behind an empty set().
+    # If any argument is provided, it will raise a TypeError. EX: numbers.clear(1) ---> TypeError: clear() takes no arguments (1 given)
 
-numbers = {10, 20, 30} # ---> set()
+numbers = {10, 20, 30} 
 numbers.clear()
-print(numbers)
+print(numbers) # Output: set()
 
 
-## 7.union() → Return a new set with all items from both sets
+## 7. union() → Return a new set with all items from both sets
     # --> set.union(set1, set2, ...)
     # If the sets are empty, it returns an empty set.
-    # If the sets have items, it returns a new set with all items from both sets.
+    # If the sets have items, it returns a new set with all items from both (or all) sets.
     # If the sets have duplicate items, it returns a new set with only unique items.
-    # If the sets are not provided, it will raise a TypeError. EX: numbers.union() ---> TypeError: union() takes at least 1 argument (0 given)
+    # Calling union() with no arguments is perfectly valid. EX: numbers.union() ---> Returns a shallow copy of the original set (does not raise an error).
 
-    # using operartor | (pipe) to perform union operation on two sets. It perform's the same operation as union() method. 
-
-numbers1 = {10, 20, 30}
-numbers2 = {30, 40, 50}
-result = numbers1.union(numbers2) # ---> {10, 20, 30, 40, 50}
-print(result)
+    # You can use the operator | (pipe) to perform a union operation on two sets. It performs the same operation as the union() method. 
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
-result = numbers1 | numbers2 # ---> {10, 20, 30, 40, 50}
-print(result)
+
+result = numbers1.union(numbers2) 
+print(result) # Output: {10, 20, 30, 40, 50}
+
+result = numbers1 | numbers2 
+print(result) # Output: {10, 20, 30, 40, 50}
 
 
-## 8.intersection() → Return a new set with only the items that are present in both sets
+## 8. intersection() → Return a new set with only the items present in all sets
     # --> set.intersection(set1, set2, ...)
-    # If the sets are empty, it returns an empty set.
-    # If the sets have items, it returns a new set with only the items that are present in both sets.
-    # If the sets have no common items, it returns an empty set.
-    # If the sets are not provided, it will raise a TypeError. EX: numbers.intersection() ---> TypeError: intersection() takes at least 1 argument (0 given)
+    # If the sets have items, it returns a new set with only the items present in all provided sets.
+    # If the sets have no common items, it returns an empty set set().
+    # Calling intersection() with no arguments is perfectly valid. EX: numbers1.intersection() ---> Returns a shallow copy of the original set (does not raise an error).
 
-    # using operator & (ampersand) to perform intersection operation on two sets. It perform s the same operation as intersection() method.
-
-numbers1 = {10, 20, 30}
-numbers2 = {30, 40, 50}
-result = numbers1.intersection(numbers2) # ---> {30}
-print(result)
+    # You can use the operator & (ampersand) to perform an intersection operation on two sets. It performs the same operation as the intersection() method.
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
-result = numbers1 & numbers2 # ---> {30}
-print(result)
+
+result = numbers1.intersection(numbers2) 
+print(result) # Output: {30}
+
+result = numbers1 & numbers2 
+print(result) # Output: {30}
 
 
-## 9.difference() → Return a new set with only the items that are present in the first set but not in the second set
+## 9. difference() → Return a new set with items present in the first set but NOT in the provided sets
     # --> set.difference(set1, set2, ...)
     # If the sets are empty, it returns an empty set.
-    # If the sets have items, it returns a new set with only the items that are present in the first set but not in the second set.
-    # If the sets have no common items, it returns a new set with all items from the first set.
-    # If the sets are not provided, it will raise a TypeError. EX: numbers.difference() ---> TypeError: difference() takes at least 1 argument (0 given)
+    # If the sets have items, it returns a new set with only the items that are present in the original set but missing from the provided sets.
+    # If the sets have no common items, it returns a new set with all items from the original set.
+    # Calling difference() with no arguments is perfectly valid. EX: numbers1.difference() ---> Returns a shallow copy of the original set (does not raise an error).
     
-    # using operator - (minus) to perform difference operation on two sets. It perform s the same operation as difference() method.
+    # You can use the operator - (minus) to perform a difference operation on two sets. It performs the same operation as the difference() method.
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
-result = numbers1.difference(numbers2) # ---> {10, 20}
-print(result)
 
-numbers1 = {10, 20, 30}
-numbers2 = {30, 40, 50}
-result = numbers1 - numbers2 # ---> {10, 20}
-print(result)
+result = numbers1.difference(numbers2) 
+print(result) # Output: {10, 20}
+
+result = numbers1 - numbers2 
+print(result) # Output: {10, 20}
 
 
-## 10.symmetric_difference() → Return a new set with only the items that are present in either set but not in both sets
-    # --> set.symmetric_difference(set1, set2, ...)
+## 10. symmetric_difference() → Return a new set with items present in either set, but NOT in both
+    # --> set.symmetric_difference(other_set)
+    # TRAP: Unlike union/intersection/difference, this method accepts STRICTLY ONE argument.
+    # If no arguments are provided, or if multiple are provided, it raises a TypeError.
     # If the sets are empty, it returns an empty set.
-    # If the sets have items, it returns a new set with only the items that are present in either set but not in both sets.
-    # If the sets have no common items, it returns a new set with all items from both sets.
-    # If the sets are not provided, it will raise a TypeError. EX: numbers.symmetric_difference() ---> TypeError: symmetric_difference() takes at least 1 argument (0 given)
+    # If the sets have no common items, it returns a new set with all items from both sets (acting like union).
 
-    # using operator ^ (caret) to perform symmetric difference operation on two sets. It perform s the same operation as symmetric_difference() method.
+    # You can use the operator ^ (caret) to perform a symmetric difference operation on two sets. It performs the same operation as the symmetric_difference() method.
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
-result = numbers1.symmetric_difference(numbers2) # ---> {10, 20, 40, 50}
-print(result)
 
-numbers1 = {10, 20, 30}
-numbers2 = {30, 40, 50}
-result = numbers1 ^ numbers2 # ---> {10, 20, 40, 50}
-print(result)
+result = numbers1.symmetric_difference(numbers2) 
+print(result) # Output: {10, 20, 40, 50}
+
+result = numbers1 ^ numbers2 
+print(result) # Output: {10, 20, 40, 50}
 
 
-## 11.issubset() → Return True if all items of the set are present in another set
-    # --> set.issubset(set1, set2, ...)
-    # If the sets are empty, it returns True.
-    # If the sets have items, it returns True if all items of the set are present in another set.
-    # If the sets have no common items, it returns False.
-    # If the sets are not provided, it will raise a TypeError. EX: numbers.issubset() ---> TypeError: issubset() takes at least 1 argument (0 given)    
-    # If the set is modified after the issubset() call, the issubset() will not be affected. If the issubset() is called again, it will return the updated result.
+## 11. issubset() → Return True if all items of the original set are present in the provided set
+    # --> set.issubset(other_set)
+    # TRAP: This method accepts STRICTLY ONE argument. Passing multiple sets raises a TypeError.
+    # If no argument is provided, it raises a TypeError: issubset() takes exactly one argument (0 given).
+    # Math rule: An empty set is a subset of EVERY set. So set().issubset(any_set) is always True.
+    # It evaluates instantly, returning a standard True/False boolean.
+
+    # You can use the <= operator to check for a subset.
+    # You can use the < operator to check for a "proper subset" (all items exist in the second set, AND the second set is larger).
 
 numbers1 = {10, 20, 30}
 numbers2 = {10, 20, 30, 40, 50}
-result = numbers1.issubset(numbers2) # ---> True, because all items of numbers1 are present in numbers2
-print(result) # Output: True
+
+result = numbers1.issubset(numbers2) 
+print(result) # ---> True, because all items of numbers1 are in numbers2
+
+# Using the operator:
+print(numbers1 <= numbers2) # ---> True
 
 
-## 12.issuperset() → Return True if all items of another set are present in the set
-    # --> set.issuperset(set1, set2, ...)
-    # If the sets are empty, it returns True.
-    # If the sets have items, it returns True if all items of another set are present in the set.
-    # If the sets have no common items, it returns False.
-    # If the sets are not provided, it will raise a TypeError. EX: numbers.issuperset() ---> TypeError: issuperset() takes at least 1 argument (0 given)
-    # If the set is modified after the issuperset() call, the issuperset() will not be affected. If the issuperset() is called again, it will return the updated result.
+## 12. issuperset() → Return True if all items of the provided set are present in the original set
+    # --> set.issuperset(other_set)
+    # TRAP: This method accepts STRICTLY ONE argument. Passing multiple sets raises a TypeError.
+    # If no argument is provided, it raises a TypeError: issuperset() takes exactly one argument (0 given).
+    # Math rule: EVERY set is a superset of an empty set. So any_set.issuperset(set()) is always True.
+    # It evaluates instantly, returning a standard True/False boolean.
+
+    # You can use the >= operator to check for a superset.
+    # You can use the > operator to check for a "proper superset" (all items from the second set are in the first set, AND the first set is larger).
 
 numbers1 = {10, 20, 30, 40, 50}
 numbers2 = {10, 20, 30}
-result = numbers1.issuperset(numbers2) # ---> True, because all items of numbers2 are present in numbers1
-print(result) # Output: True
+
+result = numbers1.issuperset(numbers2) 
+print(result) # ---> True, because all items of numbers2 are present in numbers1
+
+# Using the operator:
+print(numbers1 >= numbers2) # ---> True
 
 
-## 13.copy() → Return a shallow copy of the set
+## 13. copy() → Return a shallow copy of the set
     # --> set.copy()
-    # If the set is empty, it returns an empty set.
-    # If the set has items, it returns a shallow copy of the set.
-    # If the set is not provided, it will raise a TypeError. EX: numbers.copy() ---> TypeError: copy() takes no arguments (1 given)
-    # If the set is modified after the copy, the copy will not be affected. If the copy is modified, the original set will not be affected.Example: numbers = {10, 20, 30} # ---> {10, 20, 30} numbers_copy = numbers.copy() numbers_copy.add(40) print(numbers) Output: {10, 20, 30} print(numbers_copy) # Output: {10, 20, 30, 40} similarly vice varsa, if the original set is modified, the copy will not be affected. If the copy is modified, the original set will not be affected.
+    # If the set is empty, it returns a new empty set().
+    # If the set has items, it returns a new independent set with the exact same items.
+    # It takes NO arguments. Passing an argument raises a TypeError. EX: numbers.copy(1) ---> TypeError: copy() takes no arguments (1 given)
+    # Independence: Modifying the original set after copying does NOT affect the copied set, and vice versa.
 
-numbers = {10, 20, 30} # immutable. The set itself is actually mutable (which is why you can use .add(40) on it). It is the numbers inside it that are immutable. If you want a truly immutable set where you can't even use .add(), Python has a built-in type called frozenset.
+numbers = {10, 20, 30} 
 numbers_copy = numbers.copy() # ---> {10, 20, 30}
-numbers_copy.add(40) # ---> {10, 20, 30, 40}
-print(numbers) # Output: {10, 20, 30} 
+
+# Modifying only the copy
+numbers_copy.add(40) 
+
+print(numbers)      # Output: {10, 20, 30} (Original remains untouched)
 print(numbers_copy) # Output: {10, 20, 30, 40}
 
 
-
-## 14.len() → Return the number of items in the set
+## 14. len() → Return the number of items in the set
     # --> len(set)
+    # NOTE: len() is a built-in Python function, not a set method, which is why we don't use dot notation (like set.len()).
     # If the set is empty, it returns 0.
-    # If the set has items, it returns the number of items in the set.
+    # If the set has items, it returns the number of items (the count) in the set.
     # If the set is not provided, it will raise a TypeError. EX: len() ---> TypeError: len() takes exactly one argument (0 given)
-    # If the set is modified after the len() call, the len() will not be affected. If the len() is called again, it will return the updated length of the set.
-
+    # The result of len() is an integer. If the set is modified after the len() call, the previously saved length variable will not be affected. 
 
 numbers = {10, 20, 30}
-length = len(numbers) # ---> 3
+length = len(numbers) 
+
 print(length) # Output: 3
 
 
-## 15.isdisjoint() → Return True if two sets have no common items
-    # --> set.isdisjoint(set1, set2, ...)
-    # If the sets are empty, it returns True.
-    # If the sets have items, it returns True if two sets have no common items.
-    # If the sets have common items, it returns False.
-    # If the sets are not provided, it will raise a TypeError. EX: numbers.isdisjoint() ---> TypeError: isdisjoint() takes at least 1 argument (0 given)
-    # If the sets are modified after the isdisjoint() call, the isdisjoint() will not be affected. If the isdisjoint() is called again, it will return the updated result.
+## 15. isdisjoint() → Return True if two sets have no common items
+    # --> set.isdisjoint(other_iterable)
+    # TRAP: This method accepts STRICTLY ONE argument (which can be any iterable: list, tuple, set, etc.).
+    # If no argument is provided, it raises a TypeError: isdisjoint() takes exactly one argument (0 given).
+    # Passing multiple arguments also raises a TypeError.
+    # Empty set behavior: If either set is empty, they have no common items, so it returns True.
+    # Returns True if intersection is empty, False if they share at least one element.
 
 numbers1 = {10, 20, 30}
 numbers2 = {40, 50, 60}
-result = numbers1.isdisjoint(numbers2) # ---> True, because numbers1 and numbers2 have no common items
-print(result) # Output: True
+
+result = numbers1.isdisjoint(numbers2) 
+print(result) # Output: True (no items in common)
+
+# Also works with lists/tuples:
+print(numbers1.isdisjoint([30, 40])) # Output: False (30 is in common)
 
 
 ## 16. frozenset() → Return an immutable set
     # --> frozenset(iterable)
-    # If the iterable is empty, it returns an empty frozenset.
-    # If the iterable has items, it returns an immutable set with the items from the iterable
-    # If the iterable is not provided, Calling frozenset() without providing an iterable will not raise a TypeError; instead, it safely returns an empty, immutable frozenset() object i.e : # Output: frozenset().
-    # If the iterable is modified after the frozenset() call, the frozenset() will not be affected. If the frozenset() is called again, it will return the updated result.
+    # NOTE: frozenset() is a built-in Python type constructor, not a set method.
+    # Returns an immutable, hashable version of a set that CANNOT be changed (no add/remove methods).
+    # If no argument is provided, it safely returns an empty frozenset().
+    # The elements inside the iterable MUST be hashable/immutable.
+    # Modifying the original iterable after creating a frozenset will NOT affect the frozenset.
+    # Key Power: Because frozensets are immutable, they CAN be used as dictionary keys or stored inside another set!
 
 numbers = {10, 20, 30}
-immutable_numbers = frozenset(numbers) # ---> frozenset({10, 20, 30})
+immutable_numbers = frozenset(numbers) 
+
 print(immutable_numbers) # Output: frozenset({10, 20, 30})
+
+# Attempting to modify raises an AttributeError:
+# immutable_numbers.add(40) # ---> AttributeError: 'frozenset' object has no attribute 'add'
 
 
 # Format:
-###frozenset(iterable)
+### frozenset(iterable)
 #
 # frozenset() creates an immutable version of a set.
 #
@@ -265,8 +291,8 @@ print(immutable_numbers) # Output: frozenset({10, 20, 30})
 #
 # A frozenset cannot be modified.
 #
-# immutable_numbers.add(40)    # X AttributeError : AttributeError: 'frozenset' object has no attribute 'add'
-# immutable_numbers.remove(10) # X AttributeError : AttributeError: 'frozenset' object has no attribute 'remove'
+# immutable_numbers.add(40)    # X AttributeError: 'frozenset' object has no attribute 'add'
+# immutable_numbers.remove(10) # X AttributeError: 'frozenset' object has no attribute 'remove'
 #
 # The iterable can be a list, tuple, set, string, etc.
 #
@@ -277,7 +303,7 @@ print(immutable_numbers) # Output: frozenset({10, 20, 30})
 #
 # frozenset([]) -> frozenset()
 #
-# frozenset() is also valid and returns an empty frozenset.
+# frozenset() is also valid and safely returns an empty frozenset.
 #
 # If the original iterable is modified after creating the frozenset, the existing frozenset is NOT affected.
 #
@@ -297,7 +323,7 @@ print(immutable_numbers) # Output: frozenset({10, 20, 30})
 #
 ## IMPORTANT:
 # A normal set is mutable and cannot be an element of another set.
-# A frozenset is immutable and can be an element of another set.
+# A frozenset is immutable and CAN be an element of another set.
 #
 # set       → mutable
 # frozenset → immutable
