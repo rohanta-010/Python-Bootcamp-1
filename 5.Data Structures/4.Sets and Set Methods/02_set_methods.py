@@ -204,7 +204,7 @@ print(result) # Output: True
     # If the set is not provided, it will raise a TypeError. EX: numbers.copy() ---> TypeError: copy() takes no arguments (1 given)
     # If the set is modified after the copy, the copy will not be affected. If the copy is modified, the original set will not be affected.Example: numbers = {10, 20, 30} # ---> {10, 20, 30} numbers_copy = numbers.copy() numbers_copy.add(40) print(numbers) Output: {10, 20, 30} print(numbers_copy) # Output: {10, 20, 30, 40} similarly vice varsa, if the original set is modified, the copy will not be affected. If the copy is modified, the original set will not be affected.
 
-numbers = {10, 20, 30} # immutable
+numbers = {10, 20, 30} # immutable. The set itself is actually mutable (which is why you can use .add(40) on it). It is the numbers inside it that are immutable. If you want a truly immutable set where you can't even use .add(), Python has a built-in type called frozenset.
 numbers_copy = numbers.copy() # ---> {10, 20, 30}
 numbers_copy.add(40) # ---> {10, 20, 30, 40}
 print(numbers) # Output: {10, 20, 30} 
@@ -243,7 +243,7 @@ print(result) # Output: True
     # --> frozenset(iterable)
     # If the iterable is empty, it returns an empty frozenset.
     # If the iterable has items, it returns an immutable set with the items from the iterable
-    # If the iterable is not provided, it will raise a TypeError. EX: frozenset() ---> TypeError: frozenset() takes exactly one argument (0 given)
+    # If the iterable is not provided, Calling frozenset() without providing an iterable will not raise a TypeError; instead, it safely returns an empty, immutable frozenset() object i.e : # Output: frozenset().
     # If the iterable is modified after the frozenset() call, the frozenset() will not be affected. If the frozenset() is called again, it will return the updated result.
 
 numbers = {10, 20, 30}
@@ -252,42 +252,36 @@ print(immutable_numbers) # Output: frozenset({10, 20, 30})
 
 
 # Format:
-# frozenset(iterable)
+###frozenset(iterable)
 #
 # frozenset() creates an immutable version of a set.
 #
-# Example:
+## Example:
 #
 # numbers = {10, 20, 30}
 # immutable_numbers = frozenset(numbers)
-#
 # print(immutable_numbers)
 # Output: frozenset({10, 20, 30})
 #
 # A frozenset cannot be modified.
 #
-# immutable_numbers.add(40)    # X AttributeError
-# immutable_numbers.remove(10) # X AttributeError
-#
+# immutable_numbers.add(40)    # X AttributeError : AttributeError: 'frozenset' object has no attribute 'add'
+# immutable_numbers.remove(10) # X AttributeError : AttributeError: 'frozenset' object has no attribute 'remove'
 #
 # The iterable can be a list, tuple, set, string, etc.
 #
-# frozenset([10, 20, 30])
-# → frozenset({10, 20, 30})
+# frozenset([10, 20, 30]) -> frozenset({10, 20, 30})
 #
 #
-# Empty iterable:
+## Empty iterable:
 #
-# frozenset([])
-# → frozenset()
+# frozenset([]) -> frozenset()
 #
 # frozenset() is also valid and returns an empty frozenset.
 #
+# If the original iterable is modified after creating the frozenset, the existing frozenset is NOT affected.
 #
-# If the original iterable is modified after creating the
-# frozenset, the existing frozenset is NOT affected.
-#
-# Example:
+## Example:
 #
 # numbers = {10, 20, 30}
 # immutable_numbers = frozenset(numbers)
@@ -301,35 +295,56 @@ print(immutable_numbers) # Output: frozenset({10, 20, 30})
 # → frozenset({10, 20, 30})
 #
 #
-# IMPORTANT:
+## IMPORTANT:
 # A normal set is mutable and cannot be an element of another set.
 # A frozenset is immutable and can be an element of another set.
 #
 # set       → mutable
 # frozenset → immutable
 #
-# MEMORY TRICK:
+## MEMORY TRICK:
 # frozenset = "frozen" set → cannot be changed
+# By locking the contents so they can never change, the hash value never changes, and Python never loses the item in the warehouse!
 
 
 ## 17. set() → Return a mutable set
     # --> set(iterable)
     # If the iterable is empty, it returns an empty set.
     # If the iterable has items, it returns a mutable set with the items from the iterable
-    # If the iterable is not provided, it will raise a TypeError. EX: set() ---> TypeError: set() takes exactly one argument (0 given)
+    # If the iterable is not provided, Calling set() with no arguments is perfectly valid
     # If the iterable is modified after the set() call, the set() will not be affected. If the set() is called again, it will return the updated result.
+    # In Python, if you use empty curly braces {}, Python creates an empty dictionary, not an empty set. The only way to create an empty set is by calling set() with nothing inside the parentheses.
 
-numbers = frozenset({10, 20, 30})
+numbers = frozenset({10, 20, 30}) # here the numbers set become immutable
 mutable_numbers = set(numbers) # ---> {10, 20, 30}
 print(mutable_numbers) # Output: {10, 20, 30}
+
+# Converting a list with duplicates
+my_list = [10, 20, 20, 30]
+my_set = set(my_list)
+print(my_set) # Output: {10, 20, 30} (duplicates removed)
+
+empty_dict = {}
+print(type(empty_dict)) # Output: <class 'dict'>
+
+empty_set = set()       # This is the correct way to make an empty set!
+print(type(empty_set))  # Output: <class 'set'>
 
 
 ## 18. del() → Delete a set
     # --> del set
-    # If the set is empty, it does nothing.
+    ## del is a Keyword, not a Function:
+    # In Python, del is a built-in statement (like if, for, or return), not a method or a function.
+    # Because it is not a function, you should never use parentheses with it.
+    # Incorrect: del(numbers) or del()
+    # Correct: del numbers
+
     # If the set has items, it deletes the set.
-    # If the set is not provided, it will raise a TypeError. EX: del() ---> TypeError: del() takes exactly one argument (0 given)
-    # If the set is modified after the del() call, the del() will not be affected. If the del() is called again, it will return the updated result.
+    # del completely destroys the variable name, regardless of what is inside it. If you have an empty set (numbers = set()) and you use del numbers, the variable numbers is still completely deleted, and trying to print it will give you a NameError.
+    # Once deleted, attempting to use or modify the variable will raise a NameError.
+
+    # del is a fundamental Python keyword and not a function, trying to run it by itself without providing a variable behaves differently.
+    # If you just type del by itself, or del(), Python will not give you a TypeError. It will give you a SyntaxError before the code even runs, because the grammar of the code is mathematically invalid to the Python interpreter.
 
 numbers = {10, 20, 30}
 del numbers # ---> set is deleted
@@ -340,8 +355,10 @@ print(numbers) # Output: NameError: name 'numbers' is not defined
     # --> item in set
     # If the set is empty, it returns False.
     # If the set has items, it returns True if an item is present in the set
-    # If the set is not provided, it will raise a TypeError. EX: 10 in set() ---> TypeError: argument of type 'set' is not iterable
-    # If the set is modified after the in call, the in will not be affected. If the in is called again, it will return the updated result.
+    # set() creates an empty set. A set is perfectly iterable (even if it's empty). If you run 10 in set(), Python simply checks the empty set, sees that 10 is not there, and returns False.
+    # You will only get a TypeError if the thing on the right side of in is a data type that cannot hold multiple items (like a single integer).
+    # If you forget to provide the set and just write 10 in , Python will give you a SyntaxError before the code even runs, because the sentence is grammatically incomplete.
+    # If the set is modified after the in call, the in will not be affected.
 
 numbers = {10, 20, 30}
 result = 10 in numbers # ---> True, because 10 is present in the set
@@ -352,7 +369,6 @@ print(result) # Output: True
     # --> item not in set
     # If the set is empty, it returns True.
     # If the set has items, it returns True if an item is not present in the set
-    # If the set is not provided, it will raise a TypeError. EX: 10 not in set() ---> TypeError: argument of type 'set' is not iterable
     # If the set is modified after the not in call, the not in will not be affected. If the not in is called again, it will return the updated result.
 
 numbers = {10, 20, 30}
@@ -362,41 +378,47 @@ print(result) # Output: True
 
 ## 21.intersection_update() → Update the set with only the items that are present in both sets
     # --> set.intersection_update(set1, set2, ...)
-    # If the sets are empty, it does nothing.
-    # If the sets have items, it updates the set with only the items that are present in both sets.
-    # If the sets have no common items, it updates the set to be empty.
-    # If the sets are not provided, it will raise a TypeError. EX: numbers.intersection_update() ---> TypeError: intersection_update() takes at least 1 argument (0 given)
-    # If the set is modified after the intersection_update() call, the intersection_update() will not be affected. If the intersection_update() is called again, it will return the updated result.
+    # Unlike intersection(), this does NOT return a new set. It modifies the original set in-place and returns None.
+    # It removes any item from the original set that is not found in the provided sets.
+    # If the provided set is empty, it will empty the original set (because they share no common items).
+    # If no arguments are provided (e.g., numbers1.intersection_update()), it does nothing and leaves the set unchanged
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
 numbers1.intersection_update(numbers2) # ---> {30}
 print(numbers1) # Output: {30}
 
-## 22.difference_update() → Update the set with only the items that are present in the first set but not in the second set
+## 22. difference_update() → Remove items from the original set that exist in the provided sets
     # --> set.difference_update(set1, set2, ...)
-    # If the sets are empty, it does nothing.
-    # If the sets have items, it updates the set with only the items that are present in the first set but not in the second set.
-    # If the sets have no common items, it updates the set to be the same as the first set.
-    # If the sets are not provided, it will raise a TypeError. EX: numbers.difference_update() ---> TypeError: difference_update() takes at least 1 argument (0 given)
-    # If the set is modified after the difference_update() call, the difference_update() will not be affected. If the difference_update() is called again, it will return the updated result.
+    # This modifies the original set in-place and returns None.
+    # It acts like subtraction: Original Set - Provided Sets.
+    # If the provided sets are empty (or share no common items), the original set remains completely unchanged.
+    # If no arguments are provided (e.g., numbers.difference_update()), it does nothing and leaves the set unchanged.
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
-numbers1.difference_update(numbers2) # ---> {10, 20}
+
+# Modifies numbers1 by deleting anything that is also in numbers2
+numbers1.difference_update(numbers2) 
+
 print(numbers1) # Output: {10, 20}
+print(numbers2) # Output: {30, 40, 50} (The provided set is NEVER modified!)
 
 
-## 23.symmetric_difference_update() → Update the set with only the items that are present in either set but not in both sets
-    # --> set.symmetric_difference_update(set1, set2, ...)
-    # If the sets are empty, it does nothing.
-    # If the sets have items, it updates the set with only the items that are present in either set but not in both sets.
-    # If the sets have no common items, it updates the set to be the same as the union of both sets.
-    # If the sets are not provided, it will raise a TypeError. EX: numbers.symmetric_difference_update() ---> TypeError: symmetric_difference_update() takes at least 1 argument (0 given)
-    # If the set is modified after the symmetric_difference_update() call, the symmetric_difference_update() will not be affected. If the symmetric_difference_update() is called again, it will return the updated result.
+## 23. symmetric_difference_update() → Keep items present in either set, but NOT in both
+    # --> set.symmetric_difference_update(set1)
+    # TRAP: Unlike difference_update, this method takes EXACTLY ONE argument. 
+    # If no argument is provided, or if multiple are provided, it raises a TypeError.
+    # It modifies the original set in-place and returns None.
+    # If the provided set is empty, the original set remains unchanged.
+    # If the sets have zero common items, the original set becomes the union of both sets.
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
-numbers1.symmetric_difference_update(numbers2) # ---> {10, 20, 40, 50}
+
+# Modifies numbers1: removes 30 (overlap) and adds 40, 50 (unique to numbers2)
+numbers1.symmetric_difference_update(numbers2) 
+
 print(numbers1) # Output: {10, 20, 40, 50}
+print(numbers2) # Output: {30, 40, 50} (The second set is NEVER modified!)
 
