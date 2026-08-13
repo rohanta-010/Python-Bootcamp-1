@@ -485,3 +485,48 @@ numbers3 = {1, 2, 3}
 numbers3 ^= {3, 4, 5} 
 print(numbers3) # Output: {1, 2, 4, 5}
 
+
+"""
+
+ADDING
+│
+├── add()           → add ONE item
+└── update()        → add MANY items (modifies in-place)
+
+REMOVING
+│
+├── remove()        → remove by VALUE (raises KeyError if missing)
+├── discard()       → remove by VALUE (safe, no error)
+├── pop()           → remove & return a RANDOM item
+├── clear()         → remove EVERYTHING (empties the set)
+└── del             → delete the ENTIRE variable from memory
+
+MATH OPERATIONS (Returns a NEW set)
+│
+├── union()         → ALL unique items from all sets
+├── intersection()  → ONLY items present in ALL sets
+├── difference()    → items in FIRST set, but NOT in others
+└── symmetric_difference() → items in EITHER set, but NOT both
+
+MATH UPDATES (Modifies ORIGINAL set in-place)
+│
+├── intersection_update()         → keep ONLY common items
+├── difference_update()           → remove items found in others
+└── symmetric_difference_update() → keep EITHER, but NOT both
+
+COMPARISONS & SEARCHING (Returns True / False)
+│
+├── issubset()      → are ALL our items inside the other set?
+├── issuperset()    → do WE contain all items of the other set?
+├── isdisjoint()    → do they share ZERO common items?
+├── in              → is this specific item PRESENT?
+└── not in          → is this specific item MISSING?
+
+UTILITY & CREATION
+│
+├── set()           → create a mutable set (or remove duplicates)
+├── frozenset()     → create an IMMUTABLE set (can be hashed)
+├── copy()          → create a separate set i.e Shallow copy
+└── len()           → count total number of items
+
+"""
