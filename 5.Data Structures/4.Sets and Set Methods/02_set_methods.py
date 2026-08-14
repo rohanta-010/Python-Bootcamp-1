@@ -365,12 +365,15 @@ print(type(empty_set))  # Output: <class 'set'>
 ## 18. del → Delete a set variable from memory
     # --> del set_variable
     # KEYWORD vs FUNCTION: `del` is a built-in Python statement/keyword, NOT a function or method.
-    # Idiomatic usage is WITHOUT parentheses: `del numbers`.
+    # Idiomatic usage is WITHOUT parentheses: `del numbers`.(Idiomatic usage : common phrases derived from machinery, computers, and digital tools, as well as writing code that feels natural and follows the best practices of a specific programming language)
     # Writing `del()` or typing `del` alone causes a parse-time `SyntaxError` because the grammar is incomplete.
     #
     # Effect: `del` unbinds the variable name entirely and removes it from the local/global namespace.
     # If no other references exist, Python's garbage collector reclaims the memory.
-    #
+    # Removes Labels: del deletes the variable name (label), not the actual data in memory.
+    # Breaks Links: It unbinds the name from the local or global namespace.
+    # Lowers Count: It drops the object's reference counter by 1.
+    # Triggers Cleanup: The garbage collector deletes the data only when its reference count hits 0.To help you app
     # Result: Attempting to access or print the variable after using `del` raises a NameError.
 
 numbers = {10, 20, 30}
