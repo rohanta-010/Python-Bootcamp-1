@@ -21,10 +21,10 @@ print(a,b,c)
 ## Extended unpacking:
 #
 print("\nDefault unpacking: ")
-a, *b = tu
+m, *n = tu
 # Python assigns:
-# a = 3
-# b = [2, 45]
-print(a,b)
+# m = 3
+# n = [2, 45]
+print(m,n)
 
 # * means "collect the remaining values".
