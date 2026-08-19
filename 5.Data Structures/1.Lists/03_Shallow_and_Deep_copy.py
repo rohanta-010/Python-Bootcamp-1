@@ -3,7 +3,7 @@
 # ============================================================
 
 ### Shallow Copy:
-# Creates a new outer object, but nested/mutable objects inside it may still be shared.
+# Creates a new outer object, but nested/mutable objects inside it may still be shared/refered
 #
 ## Example:
 
