@@ -96,140 +96,270 @@ print(numbers) # Output: {50, 20, 10, 30} (Remember: Order is not guaranteed)
 # numbers.remove()    # ---> TypeError: remove() takes exactly one argument (0 given)
 
 
-## 4. discard() → Remove an item from the set if it exists
+## 4. discard() → Remove a specific item SAFELY (only if it exists)
     # --> set.discard(item)
-    # If the item is not found, it does nothing (no error is raised).
-    # If the set is empty, it does nothing.
-    # The key difference between remove() and discard() is that remove() will throw a KeyError if the item is missing, while discard() will safely do nothing.
-    # If the item is not provided, it will raise a TypeError. EX: numbers.discard() ---> TypeError: discard() takes exactly one argument (0 given)
+    # TRAP: Modifies the set in-place and evaluates to None.
+    
+    # SAFE METHOD: The primary difference between remove() and discard() is that discard() is completely crash-proof regarding missing items. 
+    # If the item is not found (or if the set is already empty), it safely does nothing and moves on. No KeyError is raised!
+    
+    # THE ARGUMENT TRAP: Just like remove(), it requires exactly one argument. Calling it empty (numbers.discard()) raises a TypeError.
+    
+    # EXPERT TIP: Default to using discard() for standard set operations. Only use remove() if your program's logic explicitly relies on knowing whether an item was successfully removed or not.
 
 numbers = {10, 20, 30, 40, 50} 
+
+# Standard Removal
 numbers.discard(40)
-print(numbers) # Output: {10, 20, 30, 50}
+print(numbers) # Output: {50, 20, 10, 30} (Remember: Order is not guaranteed)
 
-# Trying to discard an item that isn't there
-numbers.discard(99) # Does nothing, no error!
+# The Safe Failure (Item not in set)
+numbers.discard(99) # SAFE: Does absolutely nothing, no crash!
+print(numbers)      # Output: {50, 20, 10, 30} (Set remains unchanged)
+
+# The Missing Argument Trap:
+# numbers.discard()   # ---> TypeError: discard() takes exactly one argument (0 given)
 
 
-## 5. pop() → Remove and return an arbitrary item from the set
+## 5. pop() → Remove and return an ARBITRARY item
     # --> set.pop()
-    # If the set is empty, it raises a KeyError.
-    # If the set has only one item, it removes and returns that item.
-    # If the set has multiple items, it removes and returns an arbitrary item (based on the underlying hash table, not necessarily the order you added them).
-    # If an argument is provided, it will raise a TypeError. EX: numbers.pop(1) ---> TypeError: pop() takes no arguments (1 given)
-    # NOTE: Unlike lists, sets do not have indexes, so you cannot specify which item to pop.
+    # TRAP: Unlike remove() and discard(), this method DOES evaluate to a value (the removed item) while modifying the set in-place.
+    
+    # THE UNPREDICTABLE TRAP: Because sets are completely unordered and lack indexes, you have ZERO control over which item gets removed. It removes an arbitrary item based on Python's internal memory hashing.
+    
+    # THE ERROR TRAP: If the set is completely empty, it crashes with a KeyError.
+    
+    # THE ARGUMENT TRAP: Unlike list.pop(index), set.pop() takes NO arguments. Trying to pass an index (e.g., numbers.pop(0)) crashes with a TypeError.
+    
+    # EXPERT TIP: Because it is unpredictable, set.pop() is rarely used for specific data manipulation. However, it is fantastic for destroying a set piece-by-piece in a `while` loop (e.g., processing a queue of unique tasks where the order doesn't matter).
 
-numbers = {10, 20, 30} 
+numbers = {10, 20, 30, 40}
+
+# Standard Pop (No arguments allowed!)
 removed_item = numbers.pop()
 
-print(removed_item) # Output: Could be 10, 20, or 30 (arbitrary)
-print(numbers)      # Output: The set with the remaining two items
+print(f"Removed: {removed_item}") # Output: Could be 40, 10, 20, or 30!
+print(f"Remaining: {numbers}")    # Output: The set minus the removed item
+
+# The Argument Trap:
+# numbers.pop(1) # ---> TypeError: set.pop() takes no arguments (1 given)
+
+# The Empty Set Trap:
+# empty_set = set()
+# empty_set.pop() # ---> KeyError: 'pop from an empty set'
 
 
-## 6. clear() → Remove all items from the set
+## 6. clear() → Remove ALL items from the set
     # --> set.clear()
-    # If the set is empty, it safely does nothing.
-    # If the set is not empty, it removes all items, leaving behind an empty set().
-    # If any argument is provided, it will raise a TypeError. EX: numbers.clear(1) ---> TypeError: clear() takes no arguments (1 given)
+    # TRAP: Modifies the set in-place and evaluates to None.
+    # It completely wipes out all elements, leaving behind an empty set.
+    # If the set is already empty, it safely does nothing (no errors raised).
+    
+    # THE EMPTY SET TRAP: Notice the output of an empty set is 'set()' and NOT '{}'. 
+    # In Python, '{}' strictly creates an empty DICTIONARY. If you need to create an empty set from scratch, you MUST type 'set()'.
+    
+    # THE ARGUMENT TRAP: clear() takes NO arguments. Passing anything raises a TypeError.
 
 numbers = {10, 20, 30} 
+
+# Standard Clear
 numbers.clear()
 print(numbers) # Output: set()
 
+# The Argument Trap:
+# numbers.clear(1) # ---> TypeError: set.clear() takes no arguments (1 given)
 
-## 7. union() → Return a new set with all items from both sets
-    # --> set.union(set1, set2, ...)
-    # If the sets are empty, it returns an empty set.
-    # If the sets have items, it returns a new set with all items from both (or all) sets.
-    # If the sets have duplicate items, it returns a new set with only unique items.
-    # Calling union() with no arguments is perfectly valid. EX: numbers.union() ---> Returns a shallow copy of the original set (does not raise an error).
 
-    # You can use the operator | (pipe) to perform a union operation on two sets. It performs the same operation as the union() method. 
+## 7. union() → Return a NEW set with all unique items from multiple sets
+    # --> set.union(*iterables)
+    # TRAP: Unlike add() or update(), set math methods DO NOT modify the original set in-place. 
+    # They evaluate to a brand NEW set. You must assign the result to a variable!
+    
+    # DUPLICATE BEHAVIOR: It combines everything but strictly enforces the primary rule of sets: all duplicates are dropped.
+    
+    # THE OPERATOR TRAP (| vs .union()): 
+    # The .union() method is highly flexible and accepts ANY iterable (lists, tuples, strings). 
+    # However, the shorthand pipe operator (|) STRICTLY requires both sides to be actual sets!
+    
+    # EXPERT TIP: Calling union() with no arguments (numbers.union()) is a perfectly valid way to create a shallow copy of a set.
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
 
+# Standard Union (Notice that the duplicate '30' is merged into one)
 result = numbers1.union(numbers2) 
-print(result) # Output: {10, 20, 30, 40, 50}
+print(result) # Output: {40, 10, 50, 20, 30}
 
-result = numbers1 | numbers2 
-print(result) # Output: {10, 20, 30, 40, 50}
+# Operator Shorthand (Does the exact same thing)
+result_pipe = numbers1 | numbers2 
+print(result_pipe) # Output: {40, 10, 50, 20, 30}
+
+# ---------------------------------------------------------
+# EXPERT TIP IN ACTION: Method vs Operator Flexibility
+# ---------------------------------------------------------
+
+# The .union() method safely unpacks a LIST
+list_union = numbers1.union([80, 90]) 
+print(list_union) # Valid! Output: {80, 10, 90, 20, 30}
+
+# The pipe operator (|) crashes if you give it a LIST
+# crash_union = numbers1 | [80, 90] #  TypeError: unsupported operand type(s) for |: 'set' and 'list'
 
 
-## 8. intersection() → Return a new set with only the items present in all sets
-    # --> set.intersection(set1, set2, ...)
-    # If the sets have items, it returns a new set with only the items present in all provided sets.
-    # If the sets have no common items, it returns an empty set set().
-    # Calling intersection() with no arguments is perfectly valid. EX: numbers1.intersection() ---> Returns a shallow copy of the original set (does not raise an error).
-
-    # You can use the operator & (ampersand) to perform an intersection operation on two sets. It performs the same operation as the intersection() method.
+## 8. intersection() → Return a NEW set with only the SHARED items
+    # --> set.intersection(*iterables)
+    # TRAP: Does not modify the original set in-place. It evaluates to a brand NEW set containing only the items that exist in ALL provided sets.
+    
+    # NO OVERLAP: If there are absolutely no common items, it safely returns an empty set: set().
+    
+    # THE OPERATOR TRAP (& vs .intersection()): 
+    # Just like union(), the .intersection() method safely accepts ANY iterable (lists, strings, tuples). 
+    # However, the shorthand ampersand operator (&) STRICTLY requires actual sets on both sides!
+    
+    # EXPERT TIP: Calling intersection() with no arguments (numbers1.intersection()) returns a shallow copy of the original set.
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
 
+# Standard Intersection (Only '30' exists in both)
 result = numbers1.intersection(numbers2) 
 print(result) # Output: {30}
 
-result = numbers1 & numbers2 
-print(result) # Output: {30}
+# Operator Shorthand (Does the exact same thing)
+result_amp = numbers1 & numbers2 
+print(result_amp) # Output: {30}
+
+# ---------------------------------------------------------
+# EXPERT TIP IN ACTION: Method vs Operator Flexibility
+# ---------------------------------------------------------
+
+# The .intersection() method safely checks against a LIST
+list_intersect = numbers1.intersection([30, 99, 100]) 
+print(list_intersect) # Valid! Output: {30}
+
+# The ampersand operator (&) crashes if you give it a LIST
+# crash_intersect = numbers1 & [30, 99, 100] # TypeError: unsupported operand type(s) for &: 'set' and 'list'
 
 
-## 9. difference() → Return a new set with items present in the first set but NOT in the provided sets
-    # --> set.difference(set1, set2, ...)
-    # If the sets are empty, it returns an empty set.
-    # If the sets have items, it returns a new set with only the items that are present in the original set but missing from the provided sets.
-    # If the sets have no common items, it returns a new set with all items from the original set.
-    # Calling difference() with no arguments is perfectly valid. EX: numbers1.difference() ---> Returns a shallow copy of the original set (does not raise an error).
+## 9. difference() → Return a NEW set with items in the FIRST set, but NOT in the others
+    # --> set.difference(*iterables)
+    # TRAP: Does not modify the original set in-place. It evaluates to a brand NEW set containing items that exist in the original set, minus any items found in the provided sets.
     
-    # You can use the operator - (minus) to perform a difference operation on two sets. It performs the same operation as the difference() method.
+    # THE DIRECTION TRAP (Order Matters!): 
+    # Unlike union or intersection, difference is strictly directional. set_A - set_B will give you a completely different result than set_B - set_A.
+    
+    # THE OPERATOR TRAP (- vs .difference()): 
+    # The .difference() method safely accepts ANY iterable (lists, strings, tuples). 
+    # However, the shorthand minus operator (-) STRICTLY requires actual sets on both sides.
+    
+    # EXPERT TIP: Calling difference() with no arguments (numbers1.difference()) returns a shallow copy of the original set.
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
 
+# Standard Difference (What is in 1, that is NOT in 2?)
 result = numbers1.difference(numbers2) 
 print(result) # Output: {10, 20}
 
-result = numbers1 - numbers2 
-print(result) # Output: {10, 20}
+# Operator Shorthand (Does the exact same thing)
+result_minus = numbers1 - numbers2 
+print(result_minus) # Output: {10, 20}
+
+# The Direction Trap (Reversing the order changes everything!)
+reverse_result = numbers2 - numbers1
+print(reverse_result) # Output: {40, 50}
+
+# ---------------------------------------------------------
+# EXPERT TIP IN ACTION: Method vs Operator Flexibility
+# ---------------------------------------------------------
+
+# The .difference() method safely checks against a LIST
+list_diff = numbers1.difference([30, 99, 100]) 
+print(list_diff) # Valid! Output: {10, 20}
+
+# The minus operator (-) crashes if you give it a LIST
+# crash_diff = numbers1 - [30, 99, 100] # TypeError: unsupported operand type(s) for -: 'set' and 'list'
 
 
-## 10. symmetric_difference() → Return a new set with items present in either set, but NOT in both
-    # --> set.symmetric_difference(other_set)
-    # TRAP: Unlike union/intersection/difference, this method accepts STRICTLY ONE argument.
+## 10. symmetric_difference() → Return a NEW set with items in EITHER set, but NOT both
+    # --> set.symmetric_difference(iterable)
+    # TRAP: Does not modify the original set in-place. It evaluates to a brand NEW set containing only the "uniques" from both sides (effectively removing the overlap).
+    
+    # THE ARGUMENT TRAP: Unlike union/intersection/difference, this method accepts STRICTLY ONE argument. 
     # If no arguments are provided, or if multiple are provided, it raises a TypeError.
-    # If the sets are empty, it returns an empty set.
-    # If the sets have no common items, it returns a new set with all items from both sets (acting like union).
-
-    # You can use the operator ^ (caret) to perform a symmetric difference operation on two sets. It performs the same operation as the symmetric_difference() method.
+    
+    # THE OPERATOR TRAP (^ vs .symmetric_difference()): 
+    # The .symmetric_difference() method safely accepts ANY iterable (lists, strings, tuples). 
+    # However, the shorthand caret operator (^) STRICTLY requires actual sets on both sides.
+    
+    # EDGE CASE: If the sets have no common items, it acts exactly like a union().
 
 numbers1 = {10, 20, 30}
 numbers2 = {30, 40, 50}
 
+# Standard Symmetric Difference (Drops the shared '30')
 result = numbers1.symmetric_difference(numbers2) 
-print(result) # Output: {10, 20, 40, 50}
+print(result) # Output: {40, 10, 50, 20} (Order is not guaranteed)
 
-result = numbers1 ^ numbers2 
-print(result) # Output: {10, 20, 40, 50}
+# Operator Shorthand (Does the exact same thing)
+result_caret = numbers1 ^ numbers2 
+print(result_caret) # Output: {40, 10, 50, 20}
+
+# ---------------------------------------------------------
+# EXPERT TIP IN ACTION: Method vs Operator Flexibility
+# ---------------------------------------------------------
+
+# The method safely checks against a LIST
+list_sym = numbers1.symmetric_difference([30, 99, 100]) 
+print(list_sym) # Valid! Output: {99, 100, 20, 10}
+
+# The caret operator (^) crashes if you give it a LIST
+# crash_sym = numbers1 ^ [30, 99, 100] # TypeError: unsupported operand type(s) for ^: 'set' and 'list'
+
+# The Multiple Argument Trap:
+# numbers1.symmetric_difference(numbers2, {80}) # TypeError: symmetric_difference() takes exactly one argument (2 given)
 
 
-## 11. issubset() → Return True if all items of the original set are present in the provided set
-    # --> set.issubset(other_set)
-    # TRAP: This method accepts STRICTLY ONE argument. Passing multiple sets raises a TypeError.
-    # If no argument is provided, it raises a TypeError: issubset() takes exactly one argument (0 given).
-    # Math rule: An empty set is a subset of EVERY set. So set().issubset(any_set) is always True.
-    # It evaluates instantly, returning a standard True/False boolean.
-
-    # You can use the <= operator to check for a subset.
-    # You can use the < operator to check for a "proper subset" (all items exist in the second set, AND the second set is larger).
+## 11. issubset() → Return True if ALL items in the original set are present in the provided set
+    # --> set.issubset(iterable)
+    # TRAP: Does not return a new set. It evaluates instantly to a standard Boolean (True or False).
+    
+    # THE ARGUMENT TRAP: This method accepts STRICTLY ONE argument. 
+    # Passing zero arguments, or passing multiple, raises a TypeError.
+    
+    # THE OPERATOR TRAP (<= vs .issubset()): 
+    # The .issubset() method safely accepts ANY iterable (lists, strings, tuples). 
+    # However, the shorthand subset operator (<=) STRICTLY requires actual sets on both sides.
+    
+    # EXPERT TIP 1: The empty set is mathematically a subset of EVERY set. set().issubset(any_set) is ALWAYS True.
+    # EXPERT TIP 2 (PROPER SUBSETS): You can use the strictly-less-than operator (<) to check for a "proper subset". 
+    # This means all items exist in the second set, AND the second set is strictly larger (they are not exactly equal).
 
 numbers1 = {10, 20, 30}
 numbers2 = {10, 20, 30, 40, 50}
 
+# Standard Subset Check
 result = numbers1.issubset(numbers2) 
-print(result) # ---> True, because all items of numbers1 are in numbers2
+print(result) # Output: True (All items of numbers1 are in numbers2)
 
-# Using the operator:
-print(numbers1 <= numbers2) # ---> True
+# Operator Shorthand (Does the exact same thing)
+print(numbers1 <= numbers2) # Output: True
+
+# Proper Subset Check (< operator)
+# True because numbers1 is smaller than numbers2
+print(numbers1 < numbers2) # Output: True 
+# False because they are completely equal (not strictly smaller)
+print(numbers1 < {10, 20, 30}) # Output: False
+
+# ---------------------------------------------------------
+# EXPERT TIP IN ACTION: Method vs Operator Flexibility
+# ---------------------------------------------------------
+
+# The method safely checks against a LIST
+print(numbers1.issubset([10, 20, 30, 40, 50])) # Valid! Output: True
+
+# The <= operator crashes if you give it a LIST
+# print(numbers1 <= [10, 20, 30, 40, 50]) # TypeError: unsupported operand type(s) for <=: 'set' and 'list'
 
 
 ## 12. issuperset() → Return True if all items of the provided set are present in the original set
@@ -252,71 +382,118 @@ print(result) # ---> True, because all items of numbers2 are present in numbers1
 print(numbers1 >= numbers2) # ---> True
 
 
-## 13. copy() → Return a shallow copy of the set
+## 13. copy() → Return a SHALLOW copy of the set
     # --> set.copy()
-    # If the set is empty, it returns a new empty set().
-    # If the set has items, it returns a new independent set with the exact same items.
-    # It takes NO arguments. Passing an argument raises a TypeError. EX: numbers.copy(1) ---> TypeError: copy() takes no arguments (1 given)
-    # Independence: Modifying the original set after copying does NOT affect the copied set, and vice versa.
+    # TRAP: Does not modify the set in-place. It evaluates to a brand NEW, independent set.
+    
+    # INDEPENDENCE: Modifying the original set after copying does NOT affect the copied set, and vice versa. 
+    # (If you simply do `set_B = set_A`, they point to the exact same memory, so changing one changes both. copy() prevents this!)
+    
+    # THE ARGUMENT TRAP: It takes exactly NO arguments. Passing anything raises a TypeError.
+    
+    # EXPERT TIP: Because sets enforce the rule that their contents MUST be immutable (like ints, strings, tuples), the distinction between a "shallow copy" and a "deep copy" doesn't actually matter here like it does for lists!
 
 numbers = {10, 20, 30} 
-numbers_copy = numbers.copy() # ---> {10, 20, 30}
+numbers_copy = numbers.copy() 
 
 # Modifying only the copy
 numbers_copy.add(40) 
 
+# Proof of Independence:
 print(numbers)      # Output: {10, 20, 30} (Original remains untouched)
-print(numbers_copy) # Output: {10, 20, 30, 40}
+print(numbers_copy) # Output: {40, 10, 20, 30}
 
 
-## 14. len() → Return the number of items in the set
+## 14. len() → Return the total number of items in the set
     # --> len(set)
-    # NOTE: len() is a built-in Python function, not a set method, which is why we don't use dot notation (like set.len()).
-    # If the set is empty, it returns 0.
-    # If the set has items, it returns the number of items (the count) in the set.
-    # If the set is not provided, it will raise a TypeError. EX: len() ---> TypeError: len() takes exactly one argument (0 given)
-    # The result of len() is an integer. If the set is modified after the len() call, the previously saved length variable will not be affected. 
+    # TRAP: len() is a built-in Python function, NOT a set method. 
+    # This is why we write len(numbers) instead of numbers.len(). Trying to use dot notation will crash with an AttributeError.
+    
+    # THE ARGUMENT TRAP: It takes exactly ONE argument. Passing nothing (len()) or passing multiple arguments raises a TypeError.
+    
+    # INDEPENDENCE: The result is a standard integer. If you modify the set later, the previously saved length variable will NOT update automatically.
+    
+    # EXPERT TIP: Because of how Python sets are built under the hood (as hash tables), len() evaluates instantly—no matter if your set has 3 items or 3 million items!
 
 numbers = {10, 20, 30}
 length = len(numbers) 
 
 print(length) # Output: 3
 
+# Proving it doesn't update dynamically:
+numbers.add(40)
+print(length)       # Output: 3 (Still holds the old value)
+print(len(numbers)) # Output: 4 (The current length)
 
-## 15. isdisjoint() → Return True if two sets have no common items
-    # --> set.isdisjoint(other_iterable)
-    # TRAP: This method accepts STRICTLY ONE argument (which can be any iterable: list, tuple, set, etc.).
-    # If no argument is provided, it raises a TypeError: isdisjoint() takes exactly one argument (0 given).
-    # Passing multiple arguments also raises a TypeError.
-    # Empty set behavior: If either set is empty, they have no common items, so it returns True.
-    # Returns True if intersection is empty, False if they share at least one element.
+# The Built-In Function Trap:
+# numbers.len() # ---> AttributeError: 'set' object has no attribute 'len'
+
+
+## 15. isdisjoint() → Return True if two sets have NO common items
+    # --> set.isdisjoint(iterable)
+    # TRAP: Does not return a new set. It evaluates instantly to a standard Boolean (True or False).
+    
+    # THE ARGUMENT TRAP: This method accepts STRICTLY ONE argument. 
+    # Passing zero arguments, or passing multiple, raises a TypeError.
+    
+    # FLEXIBILITY: Just like other named methods (union, intersection), this safely accepts ANY iterable (lists, strings, tuples, etc.).
+    
+    # EMPTY SET RULE: An empty set shares nothing with any other set. Therefore, set().isdisjoint(any_iterable) is ALWAYS True.
+    
+    # EXPERT TIP (Speed!): You might think isdisjoint() is just a shortcut for checking `len(set_A & set_B) == 0`. 
+    # However, isdisjoint() is highly optimized under the hood. It stops searching (short-circuits) the exact millisecond it finds a single match, making it significantly faster than doing full set math!
 
 numbers1 = {10, 20, 30}
 numbers2 = {40, 50, 60}
 
+# Standard check (Zero overlap)
 result = numbers1.isdisjoint(numbers2) 
 print(result) # Output: True (no items in common)
 
-# Also works with lists/tuples:
-print(numbers1.isdisjoint([30, 40])) # Output: False (30 is in common)
+# Overlap check
+print(numbers1.isdisjoint({30, 40})) # Output: False (They share '30')
+
+# ---------------------------------------------------------
+# FLEXIBILITY IN ACTION: Checking against other iterables
+# ---------------------------------------------------------
+# Works perfectly against a LIST
+print(numbers1.isdisjoint([80, 90, 100])) # Valid! Output: True
+
+# Works perfectly against a STRING
+# (Note: numbers1 contains ints, so there is no overlap with string chars)
+print(numbers1.isdisjoint("hello")) # Valid! Output: True
 
 
-## 16. frozenset() → Return an immutable set
-    # --> frozenset(iterable)
-    # NOTE: frozenset() is a built-in Python type constructor, not a set method.
-    # Returns an immutable, hashable version of a set that CANNOT be changed (no add/remove methods).
-    # If no argument is provided, it safely returns an empty frozenset().
-    # The elements inside the iterable MUST be hashable/immutable.
-    # Modifying the original iterable after creating a frozenset will NOT affect the frozenset.
-    # Key Power: Because frozensets are immutable, they CAN be used as dictionary keys or stored inside another set!
+## 16. frozenset() → Return an IMMUTABLE set
+    # --> frozenset([iterable])
+    # TRAP: frozenset() is a built-in Python type constructor, NOT a set method. 
+    # It creates a frozen (unchangeable) version of a set. Because it is immutable, methods like add(), remove(), or clear() do not exist.
+    
+    # THE EMPTY ARGUMENT RULE: If no argument is provided, it safely returns an empty frozenset().
+    
+    # INDEPENDENCE: Modifying the original iterable after creating a frozenset will NOT affect the frozenset.
+    
+    # KEY POWER (Hashability!): Standard sets are mutable, meaning they are "unhashable" and CANNOT be placed inside another set or used as Dictionary keys. 
+    # Frozensets solve this! Because they are frozen/hashable, you CAN use them as dict keys or store them inside other sets!
 
 numbers = {10, 20, 30}
 immutable_numbers = frozenset(numbers) 
 
 print(immutable_numbers) # Output: frozenset({10, 20, 30})
 
-# Attempting to modify raises an AttributeError:
+# The Modification Trap:
 # immutable_numbers.add(40) # ---> AttributeError: 'frozenset' object has no attribute 'add'
+
+# ---------------------------------------------------------
+# KEY POWER IN ACTION: Nesting Sets & Dict Keys
+# ---------------------------------------------------------
+
+# A standard set CANNOT go inside a set:
+# my_set = { {1, 2}, {3, 4} } # TypeError: unhashable type: 'set'
+
+# But frozensets work perfectly!
+nested_sets = {frozenset({1, 2}), frozenset({3, 4})}
+print(nested_sets) # Valid! Output: {frozenset({1, 2}), frozenset({3, 4})}
 
 
 # Format:
