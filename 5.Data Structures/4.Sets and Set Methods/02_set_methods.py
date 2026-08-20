@@ -14,44 +14,86 @@ print(s) # here
 
 numbers = {10, 20, 30}
 
-## 1.add() → Add an item to the set
+## 1. add() → Add ONE immutable item to the set
     # --> set.add(item)
-    # If the item is already present, it does nothing.
-    # If the set is empty, it will add the item to the set.
-    # If the item is not provided, it will raise a TypeError. EX: numbers.add() ---> TypeError: add() takes exactly one argument (0 given)
-    # Because of the hashing rule, the item you put inside add() must be immutable. If you try to do numbers.add([40, 50]) (adding a list), Python will throw a TypeError: unhashable type: 'list'
+    # TRAP: Modifies the set in-place and evaluates to None.
+    # It takes STRICTLY ONE argument. Passing zero arguments raises a TypeError.
+    
+    # UNHASHABLE TRAP: The item MUST be immutable/hashable (e.g., int, float, str, tuple). 
+    # Passing a mutable object (like a list or dict: numbers.add([40, 50])) raises a TypeError: unhashable type: 'list'.
+    
+    # DUPLICATE BEHAVIOR: Sets only hold unique elements. If the item already exists in the set, it is silently ignored without raising an error.
 
-numbers = {10, 20, 30}  # ---> {10, 20, 30, 40}
+numbers = {10, 20, 30}
+
+# Standard addition
 numbers.add(40)
-print(numbers)
+print(numbers) # Output: {10, 20, 30, 40} (Note: Set element ordering is not guaranteed)
+
+# Adding a duplicate (silently ignored)
+numbers.add(10)
+print(numbers) # Output: {10, 20, 30, 40}
+
+# The Unhashable Type Trap:
+# numbers.add([50, 60]) # ---> TypeError: unhashable type: 'list'
+
+# The Missing Argument Trap:
+# numbers.add()         # ---> TypeError: add() takes exactly one argument (0 given)
 
 
 ## 2. update() → Add MULTIPLE elements
-    # --> set.update(elements) 
-    # If the elements are not iterable, it will raise a TypeError. EX: numbers.update(50) ---> TypeError: 'int' object is not iterable
-    # If the elements are already present, it does nothing (duplicates are ignored).
-    # If the set is empty, it will add the elements to the set.
-    # If the elements are empty iterables (like []), it will not change the set.
-    # Calling update() with no arguments is perfectly valid. EX: numbers.update() ---> Does nothing and leaves the set unchanged.
+    # --> set.update(*iterables)
+    # TRAP: Modifies the set in-place and evaluates to None.
+    
+    # THE TYPE TRAP: The argument(s) MUST be iterable (like a list, tuple, set, or string). 
+    # Passing a non-iterable (like a single integer: numbers.update(50)) crashes with a TypeError: 'int' object is not iterable.
+    
+    # DUPLICATE BEHAVIOR: If elements are already present, it does nothing (duplicates are silently ignored).
+    # EDGE CASES: Calling update() with empty iterables (like []), or with no arguments at all, is perfectly valid and safely leaves the set unchanged.
+    
+    # EXPERT TIP: You can pass multiple iterables at the exact same time separated by commas: numbers.update([1, 2], [3, 4]).
 
 numbers = {10, 20, 30}
-numbers.update([40, 50, 60]) # iterable list
-print(numbers) # Output: {10, 20, 30, 40, 50, 60}
 
+# Extending with an iterable (a list)
+numbers.update([40, 50, 60]) 
+print(numbers) # Output: {40, 10, 50, 20, 60, 30} (Remember: Set order is not guaranteed!)
+
+# Extending with another set (Duplicates 40 and 50 are ignored)
 numbers.update({40, 50}) 
-print(numbers) # Output: {10, 20, 30, 40, 50, 60} (duplicates 40, 50 are ignored)
+print(numbers) # Output: {40, 10, 50, 20, 60, 30}
+
+# The Non-Iterable Trap:
+# numbers.update(100) # ---> TypeError: 'int' object is not iterable
+
+# Perfectly valid "do nothing" calls:
+numbers.update()
+numbers.update([])
 
 
-## 3. remove() → Remove an item from the set
+## 3. remove() → Remove a SPECIFIC item from the set
     # --> set.remove(item)
-    # If the item is not found, it raises a KeyError.
-    # If the set is empty, it raises a KeyError (because the item is not found).
-    # Sets do not allow duplicates, so it simply removes the single unique instance of that item.
-    # If the item is not provided, it will raise a TypeError. EX: numbers.remove() ---> TypeError: remove() takes exactly one argument (0 given)
+    # TRAP: Modifies the set in-place and evaluates to None.
+    # Sets do not allow duplicates, so it removes the single unique instance of that item.
+    
+    # THE ERROR TRAP: If the item is NOT found in the set (or if the set is completely empty), it crashes with a KeyError.
+    
+    # THE ARGUMENT TRAP: It requires exactly one argument. Calling it empty (numbers.remove()) raises a TypeError.
+    
+    # EXPERT TIP: Because of the high risk of a KeyError crash, you should only use remove() if you WANT the program to stop when the item is missing. 
+    # If you want to safely attempt to remove an item without worrying if it actually exists, use discard() instead!
 
 numbers = {10, 20, 30, 40, 50} 
+
+# Standard Removal
 numbers.remove(40)
-print(numbers) # Output: {10, 20, 30, 50}
+print(numbers) # Output: {50, 20, 10, 30} (Remember: Order is not guaranteed)
+
+# The Missing Item Trap:
+# numbers.remove(100) # ---> KeyError: 100
+
+# The Missing Argument Trap:
+# numbers.remove()    # ---> TypeError: remove() takes exactly one argument (0 given)
 
 
 ## 4. discard() → Remove an item from the set if it exists
