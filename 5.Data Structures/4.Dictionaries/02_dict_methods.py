@@ -274,83 +274,191 @@ age = user_profile.get("age", "Age not provided")
 print(age) # Valid! Output: 'Age not provided'
 
 
-## 7. keys() → Return a dynamic view object containing all dictionary keys.
+## 7. keys() → Return a dynamic view object containing all dictionary keys
     # --> dict.keys()
-    # Returns a 'dict_keys' view object. 
-    # DYNAMIC VIEW: If the original dictionary changes, the view object reflects the change instantly!
-    # It is iterable (you can loop over it), but it is NOT a standard list. To use list methods, wrap it like this: list(my_dict.keys()).
+    # THE BEHAVIOR: Returns a `dict_keys` view object containing all the keys in the dictionary.
+    
+    # TRAP (The Index Trap): A view object is iterable (you can loop over it), but it is NOT a list. 
+    # Attempting to access an index directly (e.g., keys[0]) raises a TypeError. 
+    # To use indexing or list methods, you MUST wrap it: list(my_dict.keys()).
+    
+    # EXPERT TIP (The "Live Window"): A view object is dynamic, not a static copy. 
+    # It acts as a "live window" into the dictionary. If the original dictionary changes, the view object reflects that change instantly!
+    
+    # EXPERT TIP (Set Operations): Because dictionary keys are guaranteed to be unique and hashable, `dict_keys` objects actually support Set operations (like &, |, -, ^)!
 
 my_dict = {'a': 1, 'b': 2}
-
 keys = my_dict.keys()
 
-print(keys)
-# Output: dict_keys(['a', 'b'])
+print(keys)       # Output: dict_keys(['a', 'b'])
+print(type(keys)) # Output: <class 'dict_keys'>
 
-print(type(keys))
-# Output: <class 'dict_keys'>
-
-# It is iterable:
+# 1. It is iterable:
 for key in keys:
-    print(key)
+    print(key)    # Prints 'a', then 'b'
 
-# Convert to a real list:
+# 2. Converting to a real list to enable indexing:
 keys_list = list(keys)
+print(keys_list)  # Output: ['a', 'b']
 
-print(keys_list)
-# Output: ['a', 'b']
+# ---------------------------------------------------------
+# THE TRAPS & TIPS IN ACTION
+# ---------------------------------------------------------
 
-print(type(keys_list))
-# Output: <class 'list'>
+# The Index Trap:
+# print(keys[0]) # TypeError: 'dict_keys' object is not subscriptable
+print(keys_list[0]) # Valid! Output: 'a'
+
+# Proof of the "Live Window" (Dynamic View):
+print(keys) # Output: dict_keys(['a', 'b'])
+
+my_dict['c'] = 3    # We mutate the dictionary AFTER creating the 'keys' variable
+print(keys)         # Output: dict_keys(['a', 'b', 'c']) (The view updated automatically!)
+
+# The Set Math Trick:
+dict_A = {'x': 1, 'y': 2}
+dict_B = {'y': 99, 'z': 100}
+
+# Find common keys instantly using Set Intersection (&)
+common_keys = dict_A.keys() & dict_B.keys()
+print(common_keys) # Output: {'y'}
 
 
-## 8. values() → Return a view object displaying a list of all values
+## 8. values() → Return a dynamic view object containing all dictionary values
     # --> dict.values()
-    # Returns a 'dict_values' view object containing just the values.
-    # Just like keys(), it updates dynamically if the original dictionary changes.
+    # THE BEHAVIOR: Returns a `dict_values` view object containing all the values in the dictionary.
+    
+    # TRAP (The Index Trap): Just like keys(), this view object is iterable but is NOT a list. 
+    # Attempting to access an index directly (e.g., values[0]) raises a TypeError. 
+    # To use indexing, you MUST wrap it: list(my_dict.values()).
+    
+    # EXPERT TIP (The "Live Window"): Exactly like keys(), this is a dynamic view. 
+    # If the original dictionary changes, the view object reflects that change instantly!
+    
+    # TRAP (No Set Math!): Unlike dict_keys, dict_values do NOT support Set operations (&, |, etc.). 
+    # Because dictionary values are allowed to be duplicates and unhashable (like lists), Python cannot treat them like Sets.
 
 my_dict = {'a': 1, 'b': 2}
-print(my_dict.values()) # Output: dict_values([1, 2])
+vals = my_dict.values()
+
+print(vals)       # Output: dict_values([1, 2])
+print(type(vals)) # Output: <class 'dict_values'>
+
+# 1. It is iterable:
+for v in vals:
+    print(v)      # Prints 1, then 2
+
+# 2. Converting to a real list to enable indexing:
+vals_list = list(vals)
+print(vals_list)  # Output: [1, 2]
+
+# ---------------------------------------------------------
+# THE TRAPS & TIPS IN ACTION
+# ---------------------------------------------------------
+
+# The Index Trap:
+# print(vals[0]) # TypeError: 'dict_values' object is not subscriptable
+print(vals_list[0]) # Valid! Output: 1
+
+# Proof of the "Live Window" (Dynamic View):
+print(vals) # Output: dict_values([1, 2])
+
+my_dict['c'] = 3    # We mutate the dictionary AFTER creating the 'vals' variable
+print(vals)         # Output: dict_values([1, 2, 3]) (The view updated automatically!)
 
 
-## 9. items() → Return a view object of all key-value pairs as tuples
+## 9. items() → Return a dynamic view object of all key-value pairs as tuples
     # --> dict.items()
-    # Returns a 'dict_items' view object where each item is a tuple: (key, value).
-    # EXPERT TIP: This is the #1 most common method used when iterating through a dictionary in a for loop!
+    # THE BEHAVIOR: Returns a `dict_items` view object where each element is a 2-item tuple: (key, value).
+    
+    # TRAP (The Index Trap): Just like keys() and values(), this is NOT a list. 
+    # Attempting to access an index directly (e.g., pairs[0]) raises a TypeError. 
+    # To use list indexing, you MUST wrap it: list(my_dict.items()).
+    
+    # EXPERT TIP (The "Live Window"): This is also a dynamic view. 
+    # If the original dictionary changes, the view object reflects the new key-value pairs instantly!
+    
+    # EXPERT TIP (Tuple Unpacking): This is the #1 most common method used when iterating through a dictionary. 
+    # Because it returns a tuple, you can "unpack" the key and the value directly into two separate variables right inside the `for` loop definition!
 
 my_dict = {'a': 1, 'b': 2}
-print(my_dict.items()) # Output: dict_items([('a', 1), ('b', 2)])
+pairs = my_dict.items()
 
-# Typical real-world usage:
-# for key, value in my_dict.items():
-#     print(f"Key: {key} holds Value: {value}")
+print(pairs)       # Output: dict_items([('a', 1), ('b', 2)])
+print(type(pairs)) # Output: <class 'dict_items'>
+
+# ---------------------------------------------------------
+# EXPERT TIP IN ACTION: The For-Loop
+# ---------------------------------------------------------
+
+# Typical real-world idiomatic usage:
+for key, value in my_dict.items():
+    print(f"Key: {key} holds Value: {value}")
+    
+# Output:
+# Key: a holds Value: 1
+# Key: b holds Value: 2
+
+# ---------------------------------------------------------
+# THE TRAPS IN ACTION
+# ---------------------------------------------------------
+
+# The Index Trap:
+# print(pairs[0]) # TypeError: 'dict_items' object is not subscriptable
+
+# Converting to a list safely enables indexing:
+pairs_list = list(pairs)
+print(pairs_list[0]) # Valid! Output: ('a', 1)
+
+# Proof of the "Live Window" (Dynamic View):
+print(pairs) # Output: dict_items([('a', 1), ('b', 2)])
+
+my_dict['c'] = 3    # We mutate the dictionary AFTER creating the 'pairs' variable
+print(pairs)        # Output: dict_items([('a', 1), ('b', 2), ('c', 3)])
 
 
 ## 10. fromkeys() → Create a NEW dictionary from an iterable of keys
-    # --> dict.fromkeys(iterable, default_value)
-    # NOTE: This is a class method. You call it directly on the 'dict' keyword, not on an existing dictionary.
-    # It takes an iterable (like a list or tuple of strings) and assigns EVERY key the exact same default_value.
-    # If no default_value is provided, all keys are assigned None.
-    # TRAP: If the default_value is mutable (like an empty list []), ALL keys will point to the EXACT SAME list in memory!
+    # --> dict.fromkeys(iterable, [default_value])
+    # THE CLASS METHOD RULE: You call this directly on the 'dict' keyword/class, NOT on an existing dictionary variable.
+    # It takes an iterable (like a list or tuple) and creates a new dictionary, assigning EVERY key the exact same default_value.
+    # If no default_value is provided, all keys safely default to None.
+    
+    # TRAP (The Mutable Default): If the default_value is a mutable object (like an empty list []), ALL keys will point to the EXACT SAME list in memory! Modifying one key's list will modify them all.
 
 keys_list = ['a', 'b', 'c']
 new_dict = dict.fromkeys(keys_list, 0)
 
 print(new_dict) # Output: {'a': 0, 'b': 0, 'c': 0}
 
-## Real-World Use Cases for dict.fromkeys()
+# ---------------------------------------------------------
+# THE MUTABLE DEFAULT TRAP IN ACTION
+# ---------------------------------------------------------
+# Let's say we want every key to start with an empty list...
+trap_dict = dict.fromkeys(['x', 'y'], [])
 
-# -------------------------------------------------------------------------
+# We append to 'x', expecting 'y' to remain empty:
+trap_dict['x'].append(99)
+
+# But because they share the same memory box, BOTH change!
+print(trap_dict) # Output: {'x': [99], 'y': [99]}
+
+# (Fix: Use dictionary comprehension instead: {k: [] for k in ['x', 'y']})
+
+# =========================================================================
+# EXPERT TIPS: Real-World Use Cases for dict.fromkeys()
+# =========================================================================
+
+# ---------------------------------------------------------
 # USE CASE 1: Deduplicating a list while PRESERVING original order
-# -------------------------------------------------------------------------
-    # TRAP: Using list(set(my_list)) removes duplicates BUT scrambles the original item order.
-    # Because Python 3.7+ dictionaries maintain insertion order, dict.fromkeys() 
-    # removes duplicates AND keeps the original sequence intact.
+# ---------------------------------------------------------
+# TRAP: Using list(set(my_list)) removes duplicates BUT scrambles the original item order.
+# Because Python 3.7+ dictionaries officially maintain insertion order, dict.fromkeys() 
+# removes duplicates AND keeps the original sequence perfectly intact.
 
 raw_tags = ['python', 'code', 'python', 'django', 'code', 'api']
 
 # Using set() -> Duplicates removed, BUT order is lost:
-print(list(set(raw_tags))) # Output: ['api', 'django', 'code', 'python'] (Order scrambled!)
+print(list(set(raw_tags))) # Output: ['api', 'django', 'code', 'python'] (Scrambled!)
 
 # Using dict.fromkeys() -> Duplicates removed AND original order preserved:
 clean_tags = list(dict.fromkeys(raw_tags))
@@ -360,8 +468,8 @@ print(clean_tags) # Output: ['python', 'code', 'django', 'api']
 # -------------------------------------------------------------------------
 # USE CASE 2: Batch initializing default statuses, flags, or counters
 # -------------------------------------------------------------------------
-    # When initializing system monitoring, task queues, or default user settings,
-    # dict.fromkeys() sets a collection of keys to the exact same default value in a single line.
+# When initializing system monitoring, task queues, or default user settings,
+# dict.fromkeys() sets a collection of keys to the exact same state in a single line.
 
 servers = ['server_alpha', 'server_beta', 'server_gamma']
 
@@ -375,8 +483,8 @@ print(server_status)
 # -------------------------------------------------------------------------
 # USE CASE 3: Building fast O(1) membership lookup tables
 # -------------------------------------------------------------------------
-    # Converting a list of items (e.g., forbidden words, allowed IDs) into dictionary keys 
-    # allows lightning-fast O(1) constant time lookups via hash values instead of scanning a list.
+# Converting a list of items (e.g., forbidden words, allowed IDs) into dictionary keys 
+# allows lightning-fast O(1) constant time lookups via hash values (the warehouse trick) instead of slowly scanning a list.
 
 forbidden_words = ['spam', 'scam', 'phishing', 'malware']
 
@@ -390,82 +498,252 @@ if blacklisted.get(user_input):
     print("Blocked!") # Output: Blocked!
 
 
-## 11. copy() → Return a shallow copy of the dictionary
+## 11. copy() → Return a SHALLOW copy of the dictionary
     # --> dict.copy()
-    # Returns a completely new, independent dictionary with the exact same key-value pairs.
-    # It takes NO arguments.
-    # Independence: Modifying the outer structure (adding/removing keys) of the copy does NOT affect the original, and vice versa.
+    # THE BEHAVIOR: Returns a completely new dictionary object initialized with the exact same key-value pairs.
+    # THE ARGUMENT RULE: Accepts strictly ZERO arguments.
+    
+    # THE INDEPENDENCE RULE (Outer Structure): Adding, removing, or overwriting keys in the new dictionary does NOT affect the original dictionary.
+    
+    # TRAP (The Shallow Copy Trap): The copy is strictly "shallow". If the dictionary contains MUTABLE values (like lists, sets, or nested dictionaries), the new dictionary merely points to the exact same nested memory boxes! Modifying the INSIDE of those nested objects will affect BOTH dictionaries.
+    
+    # EXPERT TIP (The Deepcopy Fix): If you need a completely independent clone of a dictionary that contains nested mutable data, you must import the `copy` module and use `copy.deepcopy()`.
 
 original = {'a': 1, 'b': 2}
 my_copy = original.copy()
 
-# Modifying only the copy
+# Modifying the outer structure (adding a new key) is completely safe
 my_copy['c'] = 3 
 
 print(original) # Output: {'a': 1, 'b': 2} (Original remains untouched!)
 print(my_copy)  # Output: {'a': 1, 'b': 2, 'c': 3}
 
+# ---------------------------------------------------------
+# THE SHALLOW COPY TRAP IN ACTION
+# ---------------------------------------------------------
+nested_dict = {'user': 'harry', 'scores': [90, 85]}
+shallow = nested_dict.copy()
 
-## 12. dict() → Create a new dictionary object
-    # --> dict(iterable/kwargs)
-    # NOTE: dict() is a built-in Python type constructor, not a method on an existing dictionary.
-    # Calling dict() with no arguments creates an empty dictionary {}.
-    # You can pass keyword arguments (dict(a=1, b=2)) or an iterable of pairs (dict([('a', 1), ('b', 2)])).
-    # TRAP: If you use keyword arguments, the keys must be valid Python variable names (you can't do dict(1='a')).
+# If we append a new score to the nested list inside the copy...
+shallow['scores'].append(100)
 
+# It corrupts the original too, because both dictionaries point to the exact same list in memory!
+print(nested_dict) # Output: {'user': 'harry', 'scores': [90, 85, 100]}
+print(shallow)     # Output: {'user': 'harry', 'scores': [90, 85, 100]}
+
+# ---------------------------------------------------------
+# EXPERT TIP: The Deepcopy Fix
+# ---------------------------------------------------------
+import copy
+
+nested_dict2 = {'user': 'lily', 'scores': [95, 99]}
+deep = copy.deepcopy(nested_dict2)
+
+# If we append to the deep copy...
+deep['scores'].append(100)
+
+# The original is totally safe, because deepcopy() created brand new boxes for EVERYTHING inside!
+print(nested_dict2) # Output: {'user': 'lily', 'scores': [95, 99]}
+print(deep)         # Output: {'user': 'lily', 'scores': [95, 99, 100]}
+
+
+## 12. dict() → Create a new dictionary object (Built-in Constructor)
+    # --> dict([iterable], **kwargs)
+    # THE TYPE RULE: dict() is a built-in Python type constructor, NOT a method called on an existing dictionary.
+    
+    # THE BEHAVIOR:
+    # 1. No Arguments: Calling dict() creates an empty dictionary {}.
+    # 2. Iterable of Pairs: You can pass a list/tuple of 2-item sequences (like [('a', 1), ('b', 2)]).
+    # 3. Keyword Arguments: You can pass **kwargs (like a=1, b=2).
+    
+    # TRAP (The Kwargs Naming Trap): If you use keyword arguments (dict(a=1)), the keys MUST be valid Python identifier strings (variable names). You CANNOT use numbers or tuples as keys this way!
+    
+    # EXPERT TIP (dict() vs {}): While literal syntax `{}` is slightly faster and preferred for writing out hard-coded data, the dict() constructor shines when dynamically converting data (like zipping two lists together).
+
+# Scenario 1: Empty Dictionary
 empty_dict = dict() 
 print(empty_dict) # Output: {}
 
-# Converting a list of tuples into a dictionary
+# Scenario 2: Keyword Arguments
+kwarg_dict = dict(name="Harry", age=34)
+print(kwarg_dict) # Output: {'name': 'Harry', 'age': 34}
+
+# Scenario 3: Iterable of Pairs
 pairs = [('x', 10), ('y', 20)]
 new_dict = dict(pairs)
-print(new_dict) # Output: {'x': 10, 'y': 20}
+print(new_dict)   # Output: {'x': 10, 'y': 20}
+
+# ---------------------------------------------------------
+# THE KWARGS TRAP IN ACTION
+# ---------------------------------------------------------
+
+# Keyword keys must be valid variable names!
+# bad_dict = dict(1="a", 2="b") # SyntaxError: expression cannot contain assignment
+# (Fix: Use literal syntax {1: "a", 2: "b"} or dict([(1, "a"), (2, "b")]))
+
+# ---------------------------------------------------------
+# EXPERT TIP IN ACTION: The zip() Trick
+# ---------------------------------------------------------
+# The absolute best use of the dict() constructor is combining two parallel lists:
+
+keys_list = ['user1', 'user2', 'user3']
+vals_list = ['harry', 'jack', 'lily']
+
+# zip() pairs them up: ('user1', 'harry'), ('user2', 'jack')...
+# dict() instantly converts those pairs into a dictionary!
+users = dict(zip(keys_list, vals_list))
+
+print(users) 
+# Output: {'user1': 'harry', 'user2': 'jack', 'user3': 'lily'}
 
 
 ## 13. len() → Return the total number of key-value pairs in the dictionary
-    # --> len(dict)
-    # NOTE: len() is a built-in function, so we don't use dot notation.
-    # If the dictionary is empty, it returns 0.
-    # It counts the number of PAIRS, not the total number of individual keys and values combined.
+    # --> len(dictionary)
+    # THE TYPE RULE: len() is a built-in Python function, NOT a dictionary method. You wrap the dictionary inside it; you do not use dot notation.
+    
+    # THE BEHAVIOR: Returns an integer representing the total count of key-value PAIRS in the dictionary. 
+    # It does NOT count the keys and values as separate items.
+    # If the dictionary is empty {}, it returns 0.
+    
+    # EXPERT TIP (O(1) Time Complexity): Python dictionaries are highly optimized. 
+    # The dictionary secretly keeps a running tally of its size at all times. When you call len(), Python doesn't actually count the items one by one—it just instantly reads that tally! This makes len() lightning fast (O(1)), even on dictionaries with millions of items.
 
 my_dict = {'a': 1, 'b': 2, 'c': 3}
 length = len(my_dict) 
 
 print(length) # Output: 3
 
+# Counting an empty dictionary
+empty_dict = {}
+print(len(empty_dict)) # Output: 0
 
-## 14. del → Delete a specific key, or delete the entire variable from memory
-    # --> del dict_variable[key]  OR  del dict_variable
-    # KEYWORD vs FUNCTION: `del` is a built-in Python statement/keyword, NOT a function (no parentheses).
-    # If you use it with a key (del my_dict['a']), it removes that specific key-value pair.
-    # TRAP: If you try to delete a key that does not exist, it raises a KeyError. (Use .pop() if you want a safe fallback!)
-    # If you use it on the whole variable (del my_dict), it completely destroys the dictionary from memory.
+# ---------------------------------------------------------
+# THE COUNTING RULE IN ACTION
+# ---------------------------------------------------------
+# A nested dictionary still only counts as ONE value for its specific key!
 
-my_dict = {'a': 1, 'b': 2}
+nested = {
+    'user1': {'name': 'Harry', 'age': 34},
+    'user2': {'name': 'Lily', 'age': 94}
+}
 
-# Deleting a specific key
+print(len(nested)) # Output: 2 (There are only 2 top-level pairs here: 'user1' and 'user2')
+
+
+## 14. del → Delete a specific key-value pair, or destroy the entire variable
+    # --> del dictionary[key]  OR  del dictionary
+    # THE KEYWORD RULE: `del` is a built-in Python statement/keyword, NOT a function or method. You do not use parentheses.
+    
+    # THE BEHAVIOR:
+    # 1. Targeted Deletion: `del my_dict['a']` removes that specific key-value pair in-place.
+    # 2. Total Destruction: `del my_dict` completely destroys the variable name/reference from memory.
+    
+    # TRAP (The KeyError): If you try to delete a specific key that does NOT exist, it crashes with a KeyError! 
+    # (Reminder: Use my_dict.pop('key', default_fallback) if you need safe deletion without crashes).
+    
+    # EXPERT TIP (del vs .clear()): 
+    # my_dict.clear() empties the "box" but keeps the variable alive (it becomes {}). 
+    # `del my_dict` sets the box on fire. The variable label ceases to exist entirely!
+
+my_dict = {'a': 1, 'b': 2, 'c': 3}
+
+new_dict = my_dict
+
+# Scenario 1: Deleting a specific key
 del my_dict['a']
-print(my_dict) # Output: {'b': 2}
+print(my_dict) # Output: {'b': 2, 'c': 3}
 
-# Deleting the entire variable
+# ---------------------------------------------------------
+# THE KEYERROR TRAP IN ACTION
+# ---------------------------------------------------------
+# del my_dict['z'] # KeyError: 'z'
+# (Fix: use my_dict.pop('z', None))
+
+# ---------------------------------------------------------
+# THE DESTRUCTION TRAP (Variable Deletion)
+# ---------------------------------------------------------
+# Scenario 2: Deleting the entire variable
 del my_dict
-# print(my_dict) # ---> NameError: name 'my_dict' is not defined
+print(new_dict) # but the other one refered still remains the same with no changes 
+
+# The variable label 'my_dict' no longer exists in Python's memory!
+# print(my_dict) # NameError: name 'my_dict' is not defined
 
 
-## 15. in / not in → Return True if a KEY is present or missing in the dictionary
-    # --> key in dict
-    # TRAP: These operators ONLY check the dictionary's KEYS. They do NOT search the values!
-    # If the dictionary is empty, 'in' safely returns False, and 'not in' safely returns True.
-    # EXPERT TIP: Just like sets, dictionaries use hash values (the warehouse trick). Checking if a key exists using 'in' is incredibly fast (O(1) lookup time), even if the dictionary has millions of items!
+## 15. in / not in → Check if a KEY exists in the dictionary (Membership Testing)
+    # --> key in dictionary
+    # THE KEYWORD RULE: 'in' and 'not in' are built-in Python operators. They evaluate to a boolean (True or False).
+    
+    # TRAP (The Key-Only Trap): These operators ONLY check the dictionary's KEYS. They do absolutely nothing with the values! 
+    # Searching for a value using `in dictionary` will return False (unless that value also happens to be a key).
+    
+    # EXPERT TIP (O(1) Lightning Speed vs O(n) Slow Scan): 
+    # Because dictionary keys are hashed (the warehouse trick), checking `key in my_dict` is practically instantaneous (O(1) time complexity) even with millions of items. 
+    # However, checking `value in my_dict.values()` is SLOW (O(n)) because values aren't hashed—Python has to manually scan every single value one by one!
 
 my_dict = {'a': 1, 'b': 2}
 
-# Checking Keys
+# ---------------------------------------------------------
+# CHECKING KEYS (Fast O(1) Lookup)
+# ---------------------------------------------------------
 print('a' in my_dict)      # Output: True
+print('z' in my_dict)      # Output: False
 print('z' not in my_dict)  # Output: True
 
-# The Trap: Checking Values
-print(1 in my_dict)        # Output: False (1 is a value, but 'in' only looks at keys!)
+# Empty dictionaries safely return False without crashing
+empty_dict = {}
+print('a' in empty_dict)   # Output: False
 
-# If you actually need to check if a VALUE exists, you must use .values():
-print(1 in my_dict.values()) # Output: True
+# ---------------------------------------------------------
+# THE VALUE TRAP IN ACTION
+# ---------------------------------------------------------
+
+# We know the value 1 is inside the dictionary...
+print(1 in my_dict)        # Output: False (1 is a value, but 'in' ONLY looks at keys!)
+
+# THE FIX: If you MUST check for a value, explicitly use .values()
+print(1 in my_dict.values()) # Output: True (Just be aware this is slower on huge dictionaries!)
+
+
+'''
+
+ADDING & UPDATING
+│
+├── update()       → add/overwrite MANY pairs
+└── setdefault()   → add ONE pair (ONLY if missing) + returns value
+
+
+REMOVING
+│
+├── pop()          → remove by KEY (safe with default, returns value)
+├── popitem()      → remove LAST inserted pair (returns tuple)
+└── clear()        → remove EVERYTHING
+
+
+ACCESSING (SAFE LOOKUP)
+│
+└── get()          → get VALUE by KEY (returns None, NO KeyError)
+
+
+VIEWS (THE LIVE WINDOWS)
+│
+├── keys()         → view all KEYS
+├── values()       → view all VALUES
+└── items()        → view all PAIRS as (key, value) tuples
+
+
+CREATING & COPYING
+│
+├── fromkeys()     → create NEW dict from an iterable of keys
+└── copy()         → create a separate dictionary (Shallow copy)
+
+
+======================================================
+BONUS: BUILT-INS & KEYWORDS
+======================================================
+│
+├── len()          → HOW MANY pairs?
+├── in / not in    → check if KEY exists (Super fast O(1))
+└── del            → STRICT remove by key (or destroy variable)
+
+'''
