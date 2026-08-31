@@ -9,6 +9,7 @@ def most_expensive_product(products):
         tuple: (product_name, price) of the highest priced product.
     '''
     return max(products.items(), key=lambda x: x[1])
+    # max(iterable, key=function) means: "Look at every item, use the function to decide what value to compare, and return the original item that has the largest comparison value."
 
 
 

@@ -6,3 +6,6 @@ my_set.add(5)
 my_set.remove(2)
 
 print(my_set)
+
+check = 4 in my_set
+print(check)
