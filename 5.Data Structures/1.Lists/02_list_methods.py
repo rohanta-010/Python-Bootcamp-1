@@ -73,6 +73,12 @@ print(numbers) # Output: [10, 20, 30, 40, 50, 60, 70, '8', '9']
     # 2. Negative Indexing: If the index is negative, it inserts the item BEFORE the element currently at that negative index. (e.g., -1 inserts just before the very last item).
     
     # EXPERT TIP: Using list.insert(0, item) to add items to the front of a list is slow (O(n) time) because Python has to shift every single existing item in memory one step to the right. If you need to do this often, use 'collections.deque'!
+    ## Expert Tip: `list.insert(0, item)`
+        # * `list.insert(0, item)` → **O(n)** because existing elements must shift right.
+        # * For frequent front insertions, use **`collections.deque`**.
+        # * `deque.appendleft(item)` → **O(1)**.
+        # **Remember:** `list` = fast at the end | `deque` = fast at both ends.
+
 
 numbers = [10, 20, 30]
 
@@ -85,7 +91,7 @@ numbers.insert(100, 99)
 print(numbers) # Output: [10, 20, 15, 30, 99] (Safely appended to the end!)
 
 # The Negative Index Trap: Insert at -1
-numbers.insert(-1, 88)
+numbers.insert(-1, 88) # means 1 digit before, '-2' means 2 digit before
 print(numbers) # Output: [10, 20, 15, 30, 88, 99] (Inserted BEFORE 99!)
 
 
@@ -183,6 +189,28 @@ print(second_index) # Output: 3
     # EXPERT TIP: count() has to scan the entire list from start to finish (O(n) time). 
     # If you need to count the occurrences of EVERY item in a large list, do not use a loop with .count()! 
     # Instead, import 'Counter' from the 'collections' module—it counts everything in a single, lightning-fast pass.
+
+### `Counter` for Counting Occurrences
+# When you need the frequency of **every item** in a list:
+
+## **Avoid:**
+
+# ```
+# for num in set(numbers):
+#     print(num, numbers.count(num))
+# ```
+# → Repeatedly scans the list → **O(n²)**
+
+## **Use:**
+
+# ```
+# from collections import Counter
+# counts = Counter(numbers)
+# ```
+# → Counts everything in **one pass → O(n)**
+
+## **Remember:** `Counter(list)` = fast way to count frequencies.
+
 
 numbers = [10, 20, 30, 20, 20]
 
