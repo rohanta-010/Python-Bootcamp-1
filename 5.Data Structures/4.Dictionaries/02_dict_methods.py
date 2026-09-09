@@ -157,7 +157,7 @@ print(my_dict) # Output: {'b': 2}
 ## 4. popitem() → Remove and return the LAST inserted key-value pair (LIFO order)
     # --> dict.popitem()
     # THE BEHAVIOR: Removes and returns the most recently added key-value pair as a 2-element tuple: (key, value).
-    # (Since Python 3.7+, dictionaries officially maintain insertion order, making popitem() operate strictly in LIFO—Last-In, First-Out—order).
+    # (Since Python 3.7+, dictionaries officially maintain insertion order, making popitem() operate strictly in LIFO—Last-In First-Out—order).
     
     # THE ARGUMENT TRAP: Accepts strictly ZERO arguments. Passing anything raises a TypeError.
     
