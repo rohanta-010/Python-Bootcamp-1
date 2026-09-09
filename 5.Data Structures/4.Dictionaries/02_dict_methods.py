@@ -22,7 +22,7 @@ print(marks)
     
     # FLEXIBILITY (3 Input Formats):
     # 1. Another Dictionary: my_dict.update({'c': 3})
-    # 2. Iterable of 2-Element Sequences: List/tuple of pairs like [('c', 3)] or (('c', 3),)
+    # 2. Iterable of 2-Element Sequences: List/tuple of pairs like [('c', 3)] or (('c', 3),) Here 2 elements are key and vaue
     # 3. Keyword Arguments (**kwargs): my_dict.update(c=3, d=4)
     
     # THE KWARGS TRAP: Keyword argument syntax (c=3) ONLY works if the keys are valid Python identifier strings.
@@ -125,7 +125,7 @@ for word in words:
     # If the key is MISSING and no default_value is provided, the program crashes with a KeyError.
     
     # THE SAFE FALLBACK: 
-    # If the key is MISSING but a default_value IS provided, it safely returns that default_value instead of crashing. (The dictionary remains unchanged).
+    # If the key is MISSING but a default_value is provided, it safely returns that default_value instead of crashing. (The dictionary remains unchanged).
     
     # EXPERT TIP (pop() vs del): 
     # Why use pop() instead of `del my_dict['a']`? Two huge reasons: 
@@ -144,11 +144,11 @@ print(my_dict) # Output: {'b': 2} (The key 'a' is gone)
 # ---------------------------------------------------------
 
 # Scenario 2: Key missing (No default fallback)
-# print(my_dict.pop('c')) # ❌ KeyError: 'c'
+# print(my_dict.pop('c')) # KeyError: 'c'
 
 # Scenario 3: Key missing (WITH default fallback)
 safe_val = my_dict.pop('c', 'Not Found') 
-print(safe_val) # ✅ Valid! Output: 'Not Found' (Safe fallback!)
+print(safe_val) # Valid! Output: 'Not Found' (Safe fallback!)
 
 # Proof the dictionary didn't crash and wasn't altered:
 print(my_dict) # Output: {'b': 2}
