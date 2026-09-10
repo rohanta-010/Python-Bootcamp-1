@@ -15,4 +15,5 @@ nums = [1, 2, 3, 2, 4, 1, 5, 3]
 print("Original list:", nums)
 print("Without duplicates:", remove_duplicates(nums))
 
-print("Without duplicates:", list(set(nums))) # can be used even in in this way 
+# Esier way 
+print("Without duplicates:", list(set(nums)))
