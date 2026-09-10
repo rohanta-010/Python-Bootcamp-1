@@ -1,4 +1,4 @@
-marks = {"harry": 34, "jack": 45, "lily": 94 }
+marks = {"rohan": 34, "jack": 45, "lily": 94 }
 
 print(marks.keys())
 print(marks.values())
@@ -12,7 +12,7 @@ print(marks)
 # ============================================================
 
 
-## 1. update() → Update the dictionary IN-PLACE with specified key-value pairs
+## 1. update() → Update the dictionary in-place with specified key-value pairs
     # --> dict.update([other], **kwargs)
     # TRAP: Returns None! It does NOT return a new dictionary; it mutates the calling dictionary directly in-place.
     
@@ -22,10 +22,10 @@ print(marks)
     
     # FLEXIBILITY (3 Input Formats):
     # 1. Another Dictionary: my_dict.update({'c': 3})
-    # 2. Iterable of 2-Element Sequences: List/tuple of pairs like [('c', 3)] or (('c', 3),) Here 2 elements are key and vaue
+    # 2. Iterable of 2-Element Sequences: List/tuple of pairs like [('c', 3)] or (('c', 3),) Here 2 elements are key and value
     # 3. Keyword Arguments (**kwargs): my_dict.update(c=3, d=4)
     
-    # THE KWARGS TRAP: Keyword argument syntax (c=3) ONLY works if the keys are valid Python identifier strings.
+    # THE KWARGS TRAP: Keyword argument syntax (c=3) ONLY works if the keys are valid Python identifier/variable strings.
     # You CANNOT use kwargs for integer keys (99=3) or tuple keys ((1,2)=3) for those, you must pass a dict or list of tuples.
 
 my_dict = {'a': 1, 'b': 2}
@@ -248,7 +248,7 @@ print(dict_D) # Output: {'z': 300} (dict_D still points to the original, untouch
     
     # EXPERT TIP (When to use which?): 
     # Use .get() when you are dealing with unpredictable data (like web APIs or user inputs) where missing keys are expected.
-    # Use [] when a missing key means there is a fatal flaw in your logic, and you WANT the program to "fail fast" and crash so you can fix the bug.
+    # Use [] when a missing key means there is a fatal flaw in your logic, and you want the program to "fail fast" and crash so you can fix the bug.
 
 my_dict = {'a': 1, 'b': 2}
 
@@ -285,7 +285,7 @@ print(age) # Valid! Output: 'Age not provided'
     # EXPERT TIP (The "Live Window"): A view object is dynamic, not a static copy. 
     # It acts as a "live window" into the dictionary. If the original dictionary changes, the view object reflects that change instantly!
     
-    # EXPERT TIP (Set Operations): Because dictionary keys are guaranteed to be unique and hashable, `dict_keys` objects actually support Set operations (like &, |, -, ^)!
+    # EXPERT TIP (Set Operations): Because dictionary keys are guaranteed to be unique and hashable, `dict_keys` objects actually support Set operations (like |, &, -, ^)!
 
 my_dict = {'a': 1, 'b': 2}
 keys = my_dict.keys()
