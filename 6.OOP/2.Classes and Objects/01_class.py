@@ -1,3 +1,5 @@
+# Oops is basically a way to model what we write in a program in real world,
+
 # Class: Class is a blueprint or a template. Eg. Form for an Exam that contains name, age, electives, father's name etc
 
 # Object: Specific instance created from the template (class.). Eg. Form which contains the data for John Doe
