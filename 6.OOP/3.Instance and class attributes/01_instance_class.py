@@ -21,6 +21,7 @@ print(Employee.company) # This will always print the class attribute
 # Object introspection : Object introspection in Python is the ability to examine an object's type, attributes, methods, and metadata at runtime.
 # These are special/dunder attributes and methods that Python provides through the object's class and inheritance system
 print(dir(e1))
+print(e1.__dict__)
 
 
 ## Quick memory trick:
