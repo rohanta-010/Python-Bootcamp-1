@@ -9,7 +9,7 @@ class Employee:
 
     def get_salary(self): 
         # self is important here because self is a way to reference the object of the class which is being created
-        # it's mandatory to give the first (1st) parameter as self for all the functions/methods we are defining inside a class
+        # it's mandatory to give the first (1st) parameter as self/other for all the functions/methods we are defining inside a class
         print(self)
         return 34000
 
@@ -17,9 +17,13 @@ class Employee:
 e1 = Employee() # An Object of class Employee is created here
 print(e1.get_salary()) # Employee e's get salary method is called
 
+print("*")
+
 e2 = Employee()
 print(e2.get_salary())
 print(e2.company)
+
+print("*")
 
 
 # ============================================================
@@ -37,9 +41,7 @@ print(e2.company)
 # Internally, this is approximately equivalent to:
 #   Employee.get_salary(e1)
 #
-# Therefore, the method needs a first parameter to receive
-# that object.
-#
+# Therefore, the method needs a first parameter to receive that object.
 # By convention, this first parameter is called `self`.
 
 
@@ -53,9 +55,11 @@ class Employee:
         print(self)
         return 34000
 
-
+print("\n")
 e1 = Employee()
 e1.get_salary()
+
+print("*")
 
 e2 = Employee()
 e2.get_salary()
@@ -73,9 +77,9 @@ class Employee:
 
 
 e1 = Employee()
-
-# This causes an error:
 # e1.get_salary()
+
+# This causes an error: e1.get_salary()
 
 # Why?
 #   Python automatically passes e1:
@@ -84,10 +88,7 @@ e1 = Employee()
 #       ↓
 # Employee.get_salary(e1)
 #
-# But our method is defined as:
-#
-# get_salary()
-#
+# But our method is defined as: get_salary()
 # It accepts ZERO parameters.
 #
 # Python is trying to pass 1 argument (e1),but the method has nowhere to receive it.
@@ -113,12 +114,12 @@ class Employee:
         print(employee)
         return 34000
 
-
+print("\n")
 # This works:
-#
-# e1 = Employee()
-# e1.get_salary()
-#
+
+e1 = Employee()
+e1.get_salary()
+
 # But using `self` is the standard and recommended convention in Python.
 
 
@@ -156,6 +157,7 @@ class Employee:
         print("self:", self)
         print("id(self):", id(self))
 
+print("\n")
 
 e1 = Employee()
 
@@ -186,5 +188,4 @@ e1.show_object()
 # 6. Without a parameter to receive the object, Python raises a TypeError.
 # 7. `self` is a convention, not a Python keyword.
 # ============================================================
-
 
