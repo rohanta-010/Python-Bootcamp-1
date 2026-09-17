@@ -10,8 +10,9 @@ class Dog(Animal): # This is how inheritance is done in Python
         super().speak() # We are using the speak function of the parent class
         print("Woof!")
 
-# a = Animal("Dog")
-# a.speak()
+a = Animal("Dog") # a is directly an Animal object.
+a.speak()
+print("*")
 d = Dog("Bruno")
 d.speak()
-# print(d.location)
+print(d.location)
